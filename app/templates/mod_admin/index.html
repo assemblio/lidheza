@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block rows %}
+    <div class="row">
+        <div class="col-sm-12">
+            <ul>
+            {% for campaign in campaigns %}
+                <li><strong>{{ campaign.name }}</strong> by {{ campaign.advertiser.name }}.
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock rows %}
