@@ -50,6 +50,12 @@ def load_config(app):
     # Set the secret key, keep this really secret, we use it to secure wtform filed data
     app.secret_key = config.get('Application', 'SECRET_KEY')
 
+    # Ad asset upload configs
+    allowed_extensions = config.get('Application', 'ALLOWED_EXT')
+    app.config['ALLOWED_EXTENSIONS'] = set(allowed_extensions.split(','))
+
+    app.config['UPLOAD_FOLDER'] = config.get('Application', 'UPLOAD_FOLDER')
+
     # Logging path might be relative or starts from the root.
     # If it's relative then be sure to prepend the path with the application's root directory path.
     log_path = config.get('Logging', 'PATH')

@@ -17,7 +17,10 @@
         <!-- LEADERBOARD 728x90 -->
         <div class="col-sm-12">
             <div id="dz-ad-container-728-90">
-                <form action="/file-upload" id="dz-ad-728-90" class="dropzone">
+                <form id="dz-ad-728-90" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                    <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                    <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                    <input type="hidden" name="asset_id" value="leaderboard-728x90">
                 </form>
             </div>
         </div>
@@ -33,7 +36,10 @@
                                 <!-- FULL BANNER 468x60 -->
                                 <td colspan="2" style="padding-bottom:22px;">
                                     <div id="dz-ad-container-468-60">
-                                        <form action="/file-upload" id="dz-ad-468-60" class="dropzone">
+                                        <form id="dz-ad-468-60" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                                            <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                                            <input type="hidden" name="asset_id" value="full-banner-468x60">
                                         </form>
                                     </div>
                                 </td>
@@ -42,14 +48,20 @@
                                 <td>
                                     <!-- HALF-PAGE AD 300x600 -->
                                     <div id="dz-ad-container-300-600">
-                                        <form action="/file-upload" id="dz-ad-300-600" class="dropzone">
+                                        <form id="dz-ad-300-600" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                                            <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                                            <input type="hidden" name="asset_id" value="half-page-300x600">
                                         </form>
                                     </div>
                                 </td>
                                 <td>
                                     <!-- WIDE SKYSCRAPER 160x600 -->
                                     <div id="dz-ad-container-160-600">
-                                        <form action="/file-upload" id="dz-ad-160-600" class="dropzone">
+                                        <form id="dz-ad-160-600" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                                            <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                                            <input type="hidden" name="asset_id" value="wide-skyscraper-160x160">
                                         </form>
                                     </div>
                                 </td>
@@ -62,7 +74,10 @@
                                 <td>
                                     <!-- VERTICAL RECTANGLE 240x400 -->
                                     <div id="dz-ad-container-240-400">
-                                        <form action="/file-upload" id="dz-ad-240-400" class="dropzone">
+                                        <form id="dz-ad-240-400" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                                            <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                                            <input type="hidden" name="asset_id" value="vertical-rectangle-240x400">
                                         </form>
                                     </div>
                                 </td>
@@ -71,7 +86,10 @@
                                 <td style="padding-top:22px;">
                                     <!-- MEDIUM RECTANGLE 300x250 -->
                                     <div id="dz-ad-container-300-250">
-                                        <form action="/file-upload" id="dz-ad-300-250" class="dropzone">
+                                        <form id="dz-ad-300-250" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
+                                            <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
+                                            <input type="hidden" name="asset_id" value="medium-rectangle-300x250">
                                         </form>
                                     </div>
                                 </td>

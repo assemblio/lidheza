@@ -1,5 +1,5 @@
 # coding=utf-8
-from wtforms import Form, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField
+from wtforms import Form, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField, HiddenField
 from utils import FormUtils
 
 class CampaignForm(Form):
@@ -101,3 +101,13 @@ class PublisherForm(Form):
             ('EUR','EUR')
         ],
         default='EUR')
+
+class AdAssetForm(Form):
+    #advertiser_id = HiddenField('Advertiser ID')
+    advertiser_slug = HiddenField('Advertiser Slug')
+
+    campaign_id = HiddenField('Campaign ID')
+    #campaign_slug = HiddenField('Campaign Slug')
+
+    asset_id = HiddenField('Asset ID')
+    #timestamp = HiddenField('Timestamp')
