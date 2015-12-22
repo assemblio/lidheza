@@ -133,14 +133,14 @@
                     },
                     url: "/file/post",
                     uploadMultiple: false,
-                    maxFiles: 2,
+                    addRemoveLinks: true,
                     thumbnailWidth: width,
                     thumbnailHeight: height,
                     dictDefaultMessage: message
                 });
 
-                $("#dz-ad-" + size).css('width', width + 4);
-                $("#dz-ad-" + size).css('height', height + 4);
+                $("#dz-ad-" + size).css('width', width + 4); // + 4 to account for borders (2 x 2px)
+                $("#dz-ad-" + size).css('height', height + 25); // +4 to account for borders and +21 for the remove link.
             }
         }
     });
