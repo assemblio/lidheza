@@ -1,0 +1,88 @@
+{% extends "mod_admin/campaign/assets.html" %}
+
+{% block rows %}
+
+<style>
+    .row{
+        padding-bottom: 22px;
+    }
+
+    td{
+        padding-left: 22px;
+    }
+</style>
+
+<div align="center">
+    <div class="row">
+        <!-- LEADERBOARD 728x90 -->
+        <div class="col-sm-12">
+            <div id="dz-ad-container-728-90">
+                <form action="/file-upload" id="dz-ad-728-90" class="dropzone">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <!-- FULL BANNER 468x60 -->
+                                <td colspan="2" style="padding-bottom:22px;">
+                                    <div id="dz-ad-container-468-60">
+                                        <form action="/file-upload" id="dz-ad-468-60" class="dropzone">
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <!-- HALF-PAGE AD 300x600 -->
+                                    <div id="dz-ad-container-300-600">
+                                        <form action="/file-upload" id="dz-ad-300-600" class="dropzone">
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- WIDE SKYSCRAPER 160x600 -->
+                                    <div id="dz-ad-container-160-600">
+                                        <form action="/file-upload" id="dz-ad-160-600" class="dropzone">
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="padding-left:0px;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <!-- VERTICAL RECTANGLE 240x400 -->
+                                    <div id="dz-ad-container-240-400">
+                                        <form action="/file-upload" id="dz-ad-240-400" class="dropzone">
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top:22px;">
+                                    <!-- MEDIUM RECTANGLE 300x250 -->
+                                    <div id="dz-ad-container-300-250">
+                                        <form action="/file-upload" id="dz-ad-300-250" class="dropzone">
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock rows %}
+

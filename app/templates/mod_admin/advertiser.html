@@ -3,7 +3,7 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
-            <form action="{{ url_for('admin.create') }}" method="POST">
+            <form action="{{ url_for('admin.advertiser') }}" method="POST">
             {% for field in form %}
                 <div class="form-group">
                     {{ field.label }}
