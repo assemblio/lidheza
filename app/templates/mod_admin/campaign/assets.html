@@ -122,8 +122,18 @@
                 var message = "<span class='dz-ad-message'>" + adSizes[size] + "<br>" + size.replace('-', 'x') + "</span>";
 
                 $("#dz-ad-" + size).dropzone({
+                    init: function() {
+                        // If there's already an image on the dropzone,
+                        // then simply remove it and replace it with new one.
+                        this.on("addedfile", function() {
+                            if (this.files[1]!=null){
+                                this.removeFile(this.files[0]);
+                            }
+                        });
+                    },
                     url: "/file/post",
                     uploadMultiple: false,
+                    maxFiles: 2,
                     thumbnailWidth: width,
                     thumbnailHeight: height,
                     dictDefaultMessage: message
