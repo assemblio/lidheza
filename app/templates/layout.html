@@ -52,6 +52,19 @@
           </div><!-- /.container-fluid -->
         </nav>
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endwith %}
+
         <div class="container-fluid">
             {% block rows %}
             {% endblock %}

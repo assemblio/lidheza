@@ -2,16 +2,53 @@
 
 {% block rows %}
     <div class="row">
-        <div class="col-sm-12">
-            <form action="{{ url_for('admin.campaign') }}" method="POST">
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label }}
-                    {{ field(class="form-control") }}
+        <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
+            <form class="form-horizontal" action="{{ url_for('admin.campaign', advertiser_slug=advertiser_slug ) }}" method="POST">
+
+                {{ form.advertiser_slug(value=advertiser_slug) }}
+
+                <div class="form-group {{"has-error" if form.campaign_name.errors }}">
+                    {{ form.campaign_name.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.campaign_name(class="form-control") }}
+                    </div>
                 </div>
-            {%  endfor %}
-                <div class="pull-right">
-                    <input type="submit" class="btn btn-primary"/>
+
+                <div class="form-group {{"has-error" if form.url.errors }}">
+                    {{ form.url.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.url(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-group {{"has-error" if form.impression_goal.errors }}">
+                    {{ form.impression_goal.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.impression_goal(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-group {{"has-error" if form.start_date.errors }}">
+                    {{ form.start_date.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.start_date(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-group {{"has-error" if form.end_date.errors }}">
+                    {{ form.end_date.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.end_date(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
+                            <input type="button" class="btn btn-warning" value="Cancel">
+                            <input type="submit" class="btn btn-primary" value="Continue">
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

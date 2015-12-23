@@ -1,46 +1,53 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from forms import CampaignForm, AdvertiserForm, PublisherForm, AdAssetForm
 from flask import current_app
 from slugify import slugify
 from app import mongo_utils
-import time
 import os
 
 mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 
-@mod_admin.route('/', methods=['GET'])
-def index():
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(
+                error.replace('This', 'The %s' % getattr(form, field).label.text)
+            )
+
+@mod_admin.route('/adv/<advertiser_slug>', methods=['GET'])
+def index(advertiser_slug):
     campaigns = mongo_utils.all()
-    return render_template('mod_admin/index.html', campaigns=campaigns)
+    return render_template('mod_admin/index.html', advertiser_slug=advertiser_slug, campaigns=campaigns)
 
 @mod_admin.route('/adv/<advertiser_slug>/campaign/create', methods=['GET', 'POST'])
 def campaign(advertiser_slug):
 
     if request.method == 'GET':
         form = CampaignForm()
-        return render_template('mod_admin/campaign/campaign.html', form=form)
+        return render_template('mod_admin/campaign/campaign.html', advertiser_slug=advertiser_slug, form=form)
 
     else:
         form = CampaignForm(request.form)
 
-        campaign = {
-            'advertiser': {
-                'name': form.advertiser.data,
-                'slug': slugify(form.advertiser.data, to_lower=True),
-            },
-            'domain': form.domain.data,
-            'name': form.campaign_name.data,
-            'slug': slugify(form.campaign_name.data, to_lower=True),
-            'start': form.start_date.data,
-            'end': form.end_date.data,
-            'description': form.description.data,
-            'impressions': {
-                'goal': int(form.impression_goal.data),
-                'count': 0
-            }
-        }
+        if form.validate() == False:
+            flash_errors(form)
+            return render_template('mod_admin/campaign/campaign.html', advertiser_slug=advertiser_slug, form=form)
+        else:
 
-        mongo_utils.save(campaign)
+            campaign = {
+                'advertiser': advertiser_slug,
+                'name': form.campaign_name.data,
+                'slug': slugify(form.campaign_name.data, to_lower=True),
+                'url': form.url.data,
+                'start': form.start_date.data,
+                'end': form.end_date.data,
+                'impressions': {
+                    'goal': int(form.impression_goal.data),
+                    'count': 0
+                }
+            }
+
+            mongo_utils.save(campaign)
 
     return redirect(url_for('admin.campaign_assets'))
 

@@ -1,5 +1,15 @@
 {% extends "layout.html" %}
 
+{% block script %}
+    <script>
+    $( document ).ready(function() {
+        $(".btn-new-campaign").click(function(){
+            $.get("{{ url_for('admin.campaign', advertiser_slug=advertiser_slug) }}");
+        });
+    });
+    </script>
+{% endblock script %}
+
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
@@ -8,6 +18,11 @@
                 <li><strong>{{ campaign.name }}</strong> by {{ campaign.advertiser.name }}.
             {% endfor %}
             </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="button" class="btn btn-primary btn-new-campaign" value="New Campaign">
         </div>
     </div>
 {% endblock rows %}

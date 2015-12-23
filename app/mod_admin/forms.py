@@ -1,27 +1,30 @@
 # coding=utf-8
-from wtforms import Form, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField, HiddenField
+from wtforms import Form, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField, HiddenField, validators
 from utils import FormUtils
 
 class CampaignForm(Form):
-    advertiser = StringField('Advertiser')
-    domain = StringField('Domain')
-    campaign_name = StringField('Campaign Name')
-    start_date = StringField('Start Date')
-    end_date = StringField('End Date')
-    description = TextAreaField('Description')
-    impression_goal = IntegerField('Impression Goal')
+    advertiser_slug = HiddenField('Advertiser', [validators.Required()])
+    campaign_name = StringField('Campaign Name', [validators.Required()])
+    url = StringField('URL', [validators.Required()])
+    impression_goal = IntegerField('Impression Goal', [validators.Required()])
+    start_date = StringField('Start Date', [validators.Required()])
+    end_date = StringField('End Date', [validators.Required()])
 
-    target_business_type = SelectMultipleField('Type',
+    #description = TextAreaField('Description')
+
+    '''
+    target_business_type = SelectMultipleField('Target Type',
         choices=FormUtils.get_business_types() + [('all', 'All')],
         default='all')
 
-    taget_industry = SelectMultipleField('Industry',
-        choices=FormUtils.get_industries() + [('all', 'All')],
-        default='all')
-
-    target_website_type = SelectMultipleField('Subtype',
+    target_website_type = SelectMultipleField('Target Subtype',
         choices=FormUtils.get_website_types() + [('all', 'All')],
         default='all')
+
+    taget_industry = SelectMultipleField('Target Industry',
+        choices=FormUtils.get_industries() + [('all', 'All')],
+        default='all')
+    '''
 
     # target location?
     # target publisher?
