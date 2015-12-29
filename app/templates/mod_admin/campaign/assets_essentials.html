@@ -1,16 +1,37 @@
 {% extends "mod_admin/campaign/assets.html" %}
 
+{% block style %}
+    {{ super() }}
+    <style>
+        .row{
+            padding-bottom: 22px;
+        }
+
+        td{
+            padding-left: 22px;
+        }
+    </style>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <script>
+    $( "#target" ).click(function() {
+      alert( "Handler for .click() called." );
+    });
+
+    $( "#target" ).click(function() {
+      alert( "Handler for .click() called." );
+    });
+
+    $( "#target" ).click(function() {
+      alert( "Handler for .click() called." );
+    });
+    </script>
+{% endblock %}
+
+
 {% block rows %}
-
-<style>
-    .row{
-        padding-bottom: 22px;
-    }
-
-    td{
-        padding-left: 22px;
-    }
-</style>
 
 <div align="center">
     <div class="row">
@@ -104,9 +125,18 @@
                     </td>
                 </tr>
             </table>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="{{ url_for('admin.index', advertiser_slug=advertiser_slug) }}" method="GET">
+                <input type="button" class="btn btn-danger btn-cancel" value="Cancel and Delete">
+                <input type="button" class="btn btn-warning btn-draft" value="Save as Draft">
+                <input type="submit" class="btn btn-primary btn-finished" value="Finished">
+            </form>
         </div>
     </div>
 </div>
-{% endblock rows %}
+{% endblock %}
 
