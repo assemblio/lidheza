@@ -1,14 +1,14 @@
 # coding=utf-8
-from wtforms import Form, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField, HiddenField, validators
+from wtforms import Form, DateField, IntegerField, DecimalField, StringField, TextAreaField, SelectField, SelectMultipleField, PasswordField, HiddenField, validators
 from utils import FormUtils
 
 class CampaignForm(Form):
     advertiser_slug = HiddenField('Advertiser', [validators.Required()])
     campaign_name = StringField('Campaign Name', [validators.Required()])
     url = StringField('URL', [validators.Required()])
-    impression_goal = IntegerField('Impression Goal', [validators.Required()])
-    start_date = StringField('Start Date', [validators.Required()])
-    end_date = StringField('End Date', [validators.Required()])
+    start_date = DateField('Start Date', [validators.Required()], format='%d/%m/%Y')
+    end_date = DateField('End Date', [validators.Required()], format='%d/%m/%Y')
+
 
     #description = TextAreaField('Description')
 

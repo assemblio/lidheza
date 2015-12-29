@@ -14,6 +14,8 @@
         <!-- Bootstrap -->
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-datepicker/bootstrap-datepicker.min.css') }}">
+
         <!-- Page specific CSS -->
         {% block style %}
         {% endblock %}
@@ -24,6 +26,8 @@
 
         <!-- Bootstrap -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+        <script src="{{ url_for('static', filename='bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
 
         <!-- Page specific Javascript -->
         {% block script %}

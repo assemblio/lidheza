@@ -1,5 +1,21 @@
 {% extends "layout.html" %}
 
+{% block script %}
+    <script>
+    $( document ).ready(function() {
+        $('#start_date').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+        $('#end_date').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+    });
+    </script>
+{% endblock %}
+
 {% block rows %}
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
@@ -18,13 +34,6 @@
                     {{ form.url.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">
                         {{ form.url(class="form-control") }}
-                    </div>
-                </div>
-
-                <div class="form-group {{"has-error" if form.impression_goal.errors }}">
-                    {{ form.impression_goal.label(class="control-label col-sm-4") }}
-                    <div class="col-sm-8">
-                        {{ form.impression_goal(class="form-control") }}
                     </div>
                 </div>
 
@@ -53,5 +62,5 @@
             </form>
         </div>
     </div>
-{% endblock rows %}
+{% endblock %}
 
