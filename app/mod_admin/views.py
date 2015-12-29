@@ -3,6 +3,7 @@ from forms import CampaignForm, AdvertiserForm, PublisherForm, AdAssetForm
 from flask import current_app
 from slugify import slugify
 from app import mongo_utils
+import datetime
 import os
 
 mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -34,27 +35,30 @@ def campaign(advertiser_slug):
             return render_template('mod_admin/campaign/campaign.html', advertiser_slug=advertiser_slug, form=form)
         else:
 
+            campaign_slug = slugify(form.campaign_name.data, to_lower=True)
+
             campaign = {
                 'advertiser': advertiser_slug,
                 'name': form.campaign_name.data,
-                'slug': slugify(form.campaign_name.data, to_lower=True),
+                'slug': campaign_slug,
                 'url': form.url.data,
-                'start': form.start_date.data,
-                'end': form.end_date.data,
+                'start': datetime.datetime.combine(form.start_date.data, datetime.time(00, 00)),
+                'end': datetime.datetime.combine(form.end_date.data, datetime.time(23, 59)),
                 'impressions': {
-                    'goal': int(form.impression_goal.data),
+                    'goal': 0,
                     'count': 0
                 }
             }
 
-            mongo_utils.save(campaign)
+            campaign_id = mongo_utils.insert_one(campaign)
 
-    return redirect(url_for('admin.campaign_assets'))
+    return redirect(url_for('admin.campaign_assets', advertiser_slug=advertiser_slug, campaign_slug=campaign_slug, campaign_id=campaign_id))
 
-@mod_admin.route('/adv/<advertiser_slug>/campaign/<campaign_id>/create/assets', methods=['GET'])
-def campaign_assets(advertiser_slug, campaign_id):
+@mod_admin.route('/adv/<advertiser_slug>/campaign/<campaign_slug>/<campaign_id>/create/assets', methods=['GET'])
+def campaign_assets(advertiser_slug, campaign_slug, campaign_id):
     return render_template('mod_admin/campaign/assets_essentials.html',
                            advertiser_slug=advertiser_slug,
+                           campaign_slug=campaign_slug,
                            campaign_id=campaign_id)
 
 
@@ -68,17 +72,15 @@ def upload_campaign_asset():
             form = AdAssetForm(request.form)
 
             advertiser_slug = form.advertiser_slug.data
+            campaign_slug = form.campaign_slug.data
             campaign_id = form.campaign_id.data
             asset_id = form.asset_id.data
-
-            # Get campaign object
-            campaign_slug = 'nye-2015'
 
             ext = file.filename[file.filename.rfind('.'):]
             filename = asset_id + ext
 
             # Create and save the ad asset file
-            asset_path = (current_app.config['UPLOAD_FOLDER'] + '/%s/%s-%s/') % (advertiser_slug, campaign_slug, campaign_id)
+            asset_path = ((current_app.config['UPLOAD_FOLDER'] + '%s/%s-%s/') % (advertiser_slug, campaign_slug, campaign_id)).replace('//','/')
 
             # Create the directories that do not exist
             if not os.path.exists(os.path.dirname(asset_path)):
@@ -86,7 +88,10 @@ def upload_campaign_asset():
 
             file.save(os.path.join(asset_path, filename))
 
-            #TODO: Update Mongo campaign doc
+            # Update document with asset url
+            asset_url = ((current_app.config['AD_ASSET_REL_FOLDER_URL'] + '%s/%s-%s/%s') % (advertiser_slug, campaign_slug, campaign_id, filename)).replace('//','/')
+
+            mongo_utils.insert_asset_url(campaign_id, asset_id, asset_url)
 
             return ('', 204)
 

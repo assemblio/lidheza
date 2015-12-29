@@ -55,6 +55,8 @@ def load_config(app):
     app.config['ALLOWED_EXTENSIONS'] = set(allowed_extensions.split(','))
 
     app.config['UPLOAD_FOLDER'] = config.get('Application', 'UPLOAD_FOLDER')
+    app.config['AD_ASSET_REL_FOLDER_URL'] = config.get('Application', 'AD_ASSET_REL_FOLDER_URL')
+
 
     # Logging path might be relative or starts from the root.
     # If it's relative then be sure to prepend the path with the application's root directory path.

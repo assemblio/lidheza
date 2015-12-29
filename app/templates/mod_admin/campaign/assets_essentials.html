@@ -19,6 +19,7 @@
             <div id="dz-ad-container-728-90">
                 <form id="dz-ad-728-90" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                    <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                     <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                     <input type="hidden" name="asset_id" value="leaderboard-728x90">
                 </form>
@@ -38,6 +39,7 @@
                                     <div id="dz-ad-container-468-60">
                                         <form id="dz-ad-468-60" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                                             <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                                             <input type="hidden" name="asset_id" value="full-banner-468x60">
                                         </form>
@@ -50,6 +52,7 @@
                                     <div id="dz-ad-container-300-600">
                                         <form id="dz-ad-300-600" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                                             <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                                             <input type="hidden" name="asset_id" value="half-page-300x600">
                                         </form>
@@ -60,6 +63,7 @@
                                     <div id="dz-ad-container-160-600">
                                         <form id="dz-ad-160-600" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                                             <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                                             <input type="hidden" name="asset_id" value="wide-skyscraper-160x160">
                                         </form>
@@ -76,6 +80,7 @@
                                     <div id="dz-ad-container-240-400">
                                         <form id="dz-ad-240-400" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                                             <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                                             <input type="hidden" name="asset_id" value="vertical-rectangle-240x400">
                                         </form>
@@ -88,6 +93,7 @@
                                     <div id="dz-ad-container-300-250">
                                         <form id="dz-ad-300-250" class="dropzone" action="{{ url_for('admin.upload_campaign_asset') }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="advertiser_slug" value="{{ advertiser_slug }}">
+                                            <input type="hidden" name="campaign_slug" value="{{ campaign_slug }}">
                                             <input type="hidden" name="campaign_id" value="{{ campaign_id }}">
                                             <input type="hidden" name="asset_id" value="medium-rectangle-300x250">
                                         </form>

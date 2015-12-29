@@ -8,8 +8,14 @@ class MongoUtils(object):
     def __init__(self, mongo):
         self.mongo = mongo
 
-    def save(self, doc):
-        self.mongo.db.campaigns.save(doc)
+    def insert_one(self, doc):
+        result = self.mongo.db.campaigns.insert_one(doc)
+        return str(result.inserted_id)
+
+    def insert_asset_url(self, campaign_id, asset_id, url):
+        campaign = self.find({'_id': ObjectId(campaign_id)})
+
+        self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
 
     def get(self):
         # Get list of eligible ad campaigns to return

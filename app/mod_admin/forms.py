@@ -108,9 +108,9 @@ class PublisherForm(Form):
 class AdAssetForm(Form):
     #advertiser_id = HiddenField('Advertiser ID')
     advertiser_slug = HiddenField('Advertiser Slug')
-
+    campaign_slug = HiddenField('Campaign Slug')
     campaign_id = HiddenField('Campaign ID')
-    #campaign_slug = HiddenField('Campaign Slug')
+
 
     asset_id = HiddenField('Asset ID')
     #timestamp = HiddenField('Timestamp')
