@@ -95,8 +95,10 @@ def configure_logging(app):
 def init_modules(app):
 
     # Import blueprint modules
+    from app.mod_entry_point.views import mod_entry_point
     from app.mod_serve.views import mod_serve
     from app.mod_admin.views import mod_admin
 
+    app.register_blueprint(mod_entry_point)
     app.register_blueprint(mod_admin)
     app.register_blueprint(mod_serve)

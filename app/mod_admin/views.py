@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from forms import CampaignForm, AdvertiserForm, PublisherForm, AdAssetForm
+from forms import CampaignForm, AdAssetForm
 from flask import current_app
 from slugify import slugify
 from app import mongo_utils
@@ -27,17 +27,19 @@ def campaign(advertiser_slug):
         form = CampaignForm()
         return render_template('mod_admin/campaign/campaign.html', advertiser_slug=advertiser_slug, form=form)
 
-    else:
+    else: # POST
         form = CampaignForm(request.form)
 
+        # If errors, stay on the same page and display errors
         if form.validate() == False:
             flash_errors(form)
             return render_template('mod_admin/campaign/campaign.html', advertiser_slug=advertiser_slug, form=form)
         else:
-
+            # If no errors, create draft campaign object
             campaign_slug = slugify(form.campaign_name.data, to_lower=True)
 
             campaign = {
+                'status': 'draft',
                 'advertiser': advertiser_slug,
                 'name': form.campaign_name.data,
                 'slug': campaign_slug,
@@ -52,7 +54,8 @@ def campaign(advertiser_slug):
 
             campaign_id = mongo_utils.insert_one(campaign)
 
-    return redirect(url_for('admin.campaign_assets', advertiser_slug=advertiser_slug, campaign_slug=campaign_slug, campaign_id=campaign_id))
+            # Move on the loading assets
+            return redirect(url_for('admin.campaign_assets', advertiser_slug=advertiser_slug, campaign_slug=campaign_slug, campaign_id=campaign_id))
 
 @mod_admin.route('/adv/<advertiser_slug>/campaign/<campaign_slug>/<campaign_id>/create/assets', methods=['GET'])
 def campaign_assets(advertiser_slug, campaign_slug, campaign_id):
@@ -109,26 +112,11 @@ def allowed_file(filename):
           filename.rsplit('.', 1)[1] in current_app.config['ALLOWED_EXTENSIONS']
 
 
-@mod_admin.route('/adv/create', methods=['GET', 'POST'])
-def advertiser():
-    if request.method == 'GET':
-        form = AdvertiserForm()
-        return render_template('mod_admin/advertiser.html', form=form)
-    else:
-        return 'TODO: Persistence'
-
 
 @mod_admin.route('/adv/search', methods=['GET', 'POST'])
 def ad_search():
     pass
 
-@mod_admin.route('/publisher/create', methods=['GET', 'POST'])
-def publisher():
-    if request.method == 'GET':
-        form = PublisherForm()
-        return render_template('mod_admin/publisher.html', form=form)
-    else:
-        return 'TODO: Persistence'
 
 @mod_admin.route('/publisher/search', methods=['GET', 'POST'])
 def pub_search():
