@@ -8,16 +8,47 @@ class MongoUtils(object):
     def __init__(self, mongo):
         self.mongo = mongo
 
-    def insert_one(self, doc):
-        result = self.mongo.db.campaigns.insert_one(doc)
+    def _insert_one(self, collection_name, doc):
+        result = self.mongo.db[collection_name].insert_one(doc)
         return str(result.inserted_id)
 
+    def _find_one(self, collection_name, id):
+        return self.mongo.db[collection_name].find_one({'_id': ObjectId(id)})
+
+    def _find(self, collection_name, query={}):
+        cursor = self.mongo.db[collection_name].find(query)
+        return list(cursor)
+
+    # PUBLISHER
+    def insert_one_publisher(self, doc):
+        return self._insert_one('publishers', doc)
+
+    def find_one_publisher(self, id):
+        return self._find_one('publishers', id)
+
+    def find_publishers(self, query={}):
+        return self._find('publishers', query)
+
+    # ADVERTISERS
+    def insert_one_advertiser(self, doc):
+        return self._insert_one('advertisers', doc)
+
+    def find_advertisers(self, query={}):
+        return self._find('advertisers', query)
+
+    # CAMPAIGNS
+    def insert_one_campaign(self, doc):
+        return self._insert_one('campaigns', doc)
+
+    def find_campaigns(self, query={}):
+        return self._find(self, 'campaigns', query)
+
     def insert_asset_url(self, campaign_id, asset_id, url):
-        campaign = self.find({'_id': ObjectId(campaign_id)})
+        #campaign = self.find({'_id': ObjectId(campaign_id)})
 
         self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
 
-    def get(self):
+    def get_ongoing_campaign(self):
         # Get list of eligible ad campaigns to return
         # TODO: add date filter
         cursor = self.mongo.db.campaigns.find({ "$where": "this.impressions.count != this.impressions.goal" } )
@@ -34,12 +65,7 @@ class MongoUtils(object):
 
         return campaign
 
-    def all(self):
-        return self.find()
 
-    def find(self, query={}):
-        cursor = self.mongo.db.campaigns.find(query)
-        return list(cursor)
 
     def _increment_impression(self, campaign_id):
         self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$inc': {'impressions.count': 1}})

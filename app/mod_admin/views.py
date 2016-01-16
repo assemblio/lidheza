@@ -17,7 +17,7 @@ def flash_errors(form):
 
 @mod_admin.route('/adv/<advertiser_slug>', methods=['GET'])
 def index(advertiser_slug):
-    campaigns = mongo_utils.all()
+    campaigns = mongo_utils.find_campaigns()
     return render_template('mod_admin/campaign/index.html', advertiser_slug=advertiser_slug, campaigns=campaigns)
 
 @mod_admin.route('/adv/<advertiser_slug>/campaign/create', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def campaign(advertiser_slug):
                 }
             }
 
-            campaign_id = mongo_utils.insert_one(campaign)
+            campaign_id = mongo_utils.insert_one_campaign(campaign)
 
             # Move on the loading assets
             return redirect(url_for('admin.campaign_assets', advertiser_slug=advertiser_slug, campaign_slug=campaign_slug, campaign_id=campaign_id))
@@ -112,14 +112,5 @@ def allowed_file(filename):
           filename.rsplit('.', 1)[1] in current_app.config['ALLOWED_EXTENSIONS']
 
 
-
-@mod_admin.route('/adv/search', methods=['GET', 'POST'])
-def ad_search():
-    pass
-
-
-@mod_admin.route('/publisher/search', methods=['GET', 'POST'])
-def pub_search():
-    pass
 
 

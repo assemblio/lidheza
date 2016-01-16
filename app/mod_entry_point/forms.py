@@ -1,12 +1,16 @@
-from wtforms import Form, DecimalField, StringField, TextAreaField, SelectField, PasswordField
+from wtforms import Form, DecimalField, StringField, TextAreaField, SelectField, PasswordField, validators
 from utils import FormUtils
 
 class AdvertiserForm(Form):
-    email = StringField('E-mail')
-    password = PasswordField('Password')
-    retype_password = PasswordField('Retype Password')
+    name = StringField('Name', [validators.Required()])
+    description = TextAreaField('Description')
 
-    name = StringField('Name')
+    registration_number = StringField('Business Registration Number', [validators.Required()])
+    fiscal_number = StringField('Fiscal Number', [validators.Required()])
+
+    email = StringField('E-mail', [validators.Required()])
+    password = PasswordField('Password', [validators.Required(), validators.EqualTo('password_confirm', message='Passwords must match.')])
+    password_confirm = PasswordField('Confirm Password', [validators.Required()])
 
     # Address
     street = StringField('Street')
@@ -32,15 +36,15 @@ class AdvertiserForm(Form):
 
 
 class PublisherForm(Form):
-    name = StringField('Name')
+    name = StringField('Name', [validators.Required()])
     description = TextAreaField('Description')
 
-    registration_number = StringField('Registration Number')
-    tax_number = StringField('Tax Number')
+    registration_number = StringField('Business Registration Number', [validators.Required()])
+    fiscal_number = StringField('Fiscal Number', [validators.Required()])
 
-    email = StringField('E-mail')
-    password = PasswordField('Password')
-    retype_password = PasswordField('Retype Password')
+    email = StringField('E-mail', [validators.Required()])
+    password = PasswordField('Password', [validators.Required(), validators.EqualTo('password_confirm', message='Passwords must match.')])
+    password_confirm = PasswordField('Confirm Password', [validators.Required()])
 
     type = SelectField('Type',
         choices=FormUtils.get_business_types() + [('other', 'Other')],
@@ -55,7 +59,7 @@ class PublisherForm(Form):
         default='news')
 
     # Contact
-    phone = StringField('Phone')
+    phone = StringField('Phone', [validators.Required()])
     viber = StringField('Viber')
 
     # Address
