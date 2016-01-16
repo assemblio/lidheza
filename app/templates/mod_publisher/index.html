@@ -36,8 +36,9 @@
         </div>
 
         <div class="col-sm-12">
-            <input type="button" class="btn btn-success" value="New Campaign">
-            <input type="button" class="btn btn-success" value="Account Settings">
+            <form action="{{ url_for('publisher.campaign_create', pid=publisher._id) }}" method="POST">
+                <input type="submit" class="btn btn-success btn-campaign" value="New Campaign">
+            </form>
         </div>
     </div>
 {% endblock %}

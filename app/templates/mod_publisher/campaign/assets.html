@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css">
+    <style>
+
+    .dropzone {
+        padding: 0px;
+        min-height: 90px;
+        border: 2px solid cornflowerblue;
+    }
+
+    .dropzone .dz-preview{
+        margin: 0px;
+    }
+
+    /** LEADERBOARD 728x90 **/
+    #dz-ad-container-728-90 .dropzone .dz-preview .dz-image {
+        width: 728px;
+        height: 90px;
+    }
+
+    /** FULL BANNER 468x60 **/
+    #dz-ad-container-468-60 .dropzone .dz-preview .dz-image {
+        width: 468px;
+        height: 60px;
+    }
+
+    /** HALF BANNER 234x60 **/
+    #dz-ad-container-234-60 .dropzone .dz-preview .dz-image {
+        width: 234px;
+        height: 60px;
+    }
+
+    /** POP-UNDER 720x300 **/
+    #dz-ad-container-720-300 .dropzone .dz-preview .dz-image {
+        width: 720px;
+        height: 300px;
+    }
+
+    /** HALF-PAGE AD **/
+    #dz-ad-container-300-600 .dropzone .dz-preview .dz-image {
+        width: 300px;
+        height: 600px;
+    }
+
+    /** WIDE SKYSCRAPER **/
+    #dz-ad-container-160-600 .dropzone .dz-preview .dz-image {
+        width: 160px;
+        height: 600px;
+    }
+
+    /** SKYSCRAPER **/
+    #dz-ad-container-120-600 .dropzone .dz-preview .dz-image {
+        width: 120px;
+        height: 600px;
+    }
+
+    /** LARGE RECTANGLE **/
+    #dz-ad-container-336-280 .dropzone .dz-preview .dz-image {
+        width: 336px;
+        height: 280px;
+    }
+
+    /** MEDIUM RECTANGLE **/
+    #dz-ad-container-300-250 .dropzone .dz-preview .dz-image {
+        width: 300px;
+        height: 250px;
+    }
+
+    /** VERTICAL RECTANGLE **/
+    #dz-ad-container-240-400 .dropzone .dz-preview .dz-image {
+        width: 240px;
+        height: 400px;
+    }
+
+    /** SQUARE POP-UP **/
+    #dz-ad-container-250-250 .dropzone .dz-preview .dz-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .dropzone .dz-message {
+        margin-top: 1em;
+    }
+
+    .dz-ad-message{
+        font-size: 23px;
+        color: cornflowerblue;
+    }
+
+    </style>
+{% endblock style %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
+    <script>
+
+
+    $( document ).ready(function() {
+        var adSizes = {
+            '728-90': 'Leaderboard',
+            '468-60': 'Full Banner',
+            '234-60': 'Half Banner',
+            '720-300': 'Pop-Under',
+            '300-600': 'Half-Page',
+            '160-600': 'Wide Skyscraper',
+            '120-600': 'Skyscraper',
+            '336-280': 'Large Rectangle',
+            '300-250': 'Medium Rectangle',
+            '240-400': 'Vertical Rectangle',
+            '250-250': 'Square Pop-Up'
+        };
+
+        Dropzone.autoDiscover = false;
+
+        for(var size in adSizes){
+            if($("#dz-ad-" + size) != undefined){
+                var width = parseInt(size.split('-')[0]);
+                var height = parseInt(size.split('-')[1]);
+
+                var message = "<span class='dz-ad-message'>" + adSizes[size] + "<br>" + size.replace('-', 'x') + "</span>";
+
+                $("#dz-ad-" + size).dropzone({
+                    init: function() {
+                        // If there's already an image on the dropzone,
+                        // then simply remove it and replace it with new one.
+                        this.on("addedfile", function() {
+                            if (this.files[1]!=null){
+                                this.removeFile(this.files[0]);
+                            }
+                        });
+                    },
+                    uploadMultiple: false,
+                    addRemoveLinks: true,
+                    thumbnailWidth: width,
+                    thumbnailHeight: height,
+                    dictDefaultMessage: message
+                });
+
+                $("#dz-ad-" + size).css('width', width + 4); // + 4 to account for borders (2 x 2px)
+                $("#dz-ad-" + size).css('height', height + 25); // +4 to account for borders and +21 for the remove link.
+            }
+        }
+    });
+    </script>
+{% endblock script %}

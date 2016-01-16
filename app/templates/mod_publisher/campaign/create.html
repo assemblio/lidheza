@@ -19,9 +19,7 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
-            <form class="form-horizontal" action="{{ url_for('publisher.campaign', pid=advertiser_slug ) }}" method="POST">
-
-                {{ form.advertiser_slug(value=advertiser_slug) }}
+            <form class="form-horizontal" action="{{ url_for('publisher.campaign_create', pid=pid ) }}" method="POST">
 
                 <div class="form-group {{"has-error" if form.campaign_name.errors }}">
                     {{ form.campaign_name.label(class="control-label col-sm-4") }}
