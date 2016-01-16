@@ -32,6 +32,7 @@ class MongoUtils(object):
     def find_users(self, query={}):
         return self._find('users', query)
 
+
     # CAMPAIGNS
     def insert_one_campaign(self, doc):
         return self._insert_one('campaigns', doc)
@@ -62,6 +63,10 @@ class MongoUtils(object):
         return campaign
 
 
-
+    # IMPRESSION RATE
     def _increment_impression(self, campaign_id):
         self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$inc': {'impressions.count': 1}})
+
+    def update_impression_rate(self, pid, rate):
+        self.mongo.db['users'].update({'_id': ObjectId(pid)}, {'$set': {'impressionRate': rate}})
+
