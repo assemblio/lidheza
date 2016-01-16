@@ -19,22 +19,18 @@ class MongoUtils(object):
         cursor = self.mongo.db[collection_name].find(query)
         return list(cursor)
 
-    # PUBLISHER
-    def insert_one_publisher(self, doc):
-        return self._insert_one('publishers', doc)
+    # USERS
+    def insert_one_user(self, doc):
+        return self._insert_one('users', doc)
 
-    def find_one_publisher(self, id):
-        return self._find_one('publishers', id)
+    def find_one_user(self, id):
+        return self._find_one('users', id)
 
-    def find_publishers(self, query={}):
-        return self._find('publishers', query)
+    def find_one_user_by_email(self, email):
+        return self.mongo.db['users'].find_one({'email': email})
 
-    # ADVERTISERS
-    def insert_one_advertiser(self, doc):
-        return self._insert_one('advertisers', doc)
-
-    def find_advertisers(self, query={}):
-        return self._find('advertisers', query)
+    def find_users(self, query={}):
+        return self._find('users', query)
 
     # CAMPAIGNS
     def insert_one_campaign(self, doc):

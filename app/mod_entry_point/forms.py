@@ -1,6 +1,10 @@
 from wtforms import Form, DecimalField, StringField, TextAreaField, SelectField, PasswordField, validators
 from utils import FormUtils
 
+class LoginForm(Form):
+    email = StringField('Name', [validators.Required()])
+    password = PasswordField('Password', [validators.Required()])
+
 class AdvertiserForm(Form):
     name = StringField('Name', [validators.Required()])
     description = TextAreaField('Description')

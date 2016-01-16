@@ -12,7 +12,7 @@ def flash_errors(form):
 
 @mod_publisher.route('/<pid>', methods=['GET'])
 def index(pid):
-    publisher = mongo_utils.find_one_publisher(pid)
+    publisher = mongo_utils.find_one_user(pid)
     return render_template('mod_publisher/index.html', publisher=publisher)
 
 @mod_publisher.route('/<pid>/settings', methods=['GET'])
