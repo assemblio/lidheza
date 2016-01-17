@@ -5,14 +5,15 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 class ImpressionRateForm(Form):
-    rate = DecimalField('Rate', [validators.Required()])
+    rate = DecimalField('Default Rate', [validators.Required()])
 
 class CampaignForm(Form):
     campaign_name = StringField('Campaign Name', [validators.Required()])
     url = StringField('URL', [validators.Required()])
     start_date = DateField('Start Date', [validators.Required()], format='%d/%m/%Y')
     end_date = DateField('End Date', [validators.Required()], format='%d/%m/%Y')
-    impression_goal = IntegerField('Impression Goal', [validators.Required()])
+    impression_rate = DecimalField('Impression Rate', [validators.Required()])
+    impression_goal = IntegerField('Impression Goal', [validators.Required()], default=10000)
 
 class AssetForm(Form):
     campaign_id = HiddenField('Campaign ID')

@@ -3,11 +3,8 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
-            <h2>Hello, {{ publisher.name }}.</h2>
-            <h4>Your current rate is <span class="label label-primary">{{ publisher.impressionRate }} EUR</span> per impression (<a href="" data-toggle="modal" data-target="#myModal">edit</a>).</h4>
-
-
-
+            <h2>{{ publisher.name }}</h2>
+            <h4>Your default rate is <span class="label label-primary">{{ publisher.impressionRate }} EUR</span> per impression (<a href="" data-toggle="modal" data-target="#myModal">edit</a>).</h4>
 
             <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -35,10 +32,109 @@
             <hr>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12 text-center" style="padding-bottom:25px;">
             <form action="{{ url_for('publisher.campaign_create', pid=publisher._id) }}" method="GET">
                 <input type="submit" class="btn btn-success btn-campaign" value="New Campaign">
             </form>
+        </div>
+
+
+        <div class="col-sm-12">
+            <h3>Published:</h3>
+            <hr>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Length</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Impressions</th>
+                        <th>Current Revenue</th>
+                        <th>Projected Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for campaign in published_campaigns %}
+                    <tr>
+                        <td>
+                            <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
+                        </td>
+                        <td>
+                            {{  campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ (campaign.end - campaign.start).days }} days
+                        </td>
+                        <td>
+                            {{ campaign.start.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.end.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count }} / {{ campaign.impressions.goal }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count * campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.goal * campaign.impressions.rate }}
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-sm-12">
+            <h3>Drafts:</h3>
+            <hr>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Length</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Impressions</th>
+                        <th>Current Revenue</th>
+                        <th>Projected Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for campaign in draft_campaigns %}
+                    <tr>
+                        <td>
+                            <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
+                        </td>
+                        <td>
+                            {{  campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ (campaign.end - campaign.start).days }} days
+                        </td>
+                        <td>
+                            {{ campaign.start.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.end.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count }} / {{ campaign.impressions.goal }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count * campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.goal * campaign.impressions.rate }}
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
         </div>
     </div>
 {% endblock %}

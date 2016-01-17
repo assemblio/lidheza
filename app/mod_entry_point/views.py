@@ -72,7 +72,8 @@ def publisher():
                 'password': form.password.data,
                 'registrationNumber': form.registration_number.data,
                 'fiscalNumber': form.fiscal_number.data,
-                'impressionRate': 0.01
+                'impressionRate': 0.01,
+                'adSpaces': []
             }
 
             publisher_id = mongo_utils.insert_one_user(publisher)

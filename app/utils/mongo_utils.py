@@ -15,6 +15,9 @@ class MongoUtils(object):
     def _find_one(self, collection_name, id):
         return self.mongo.db[collection_name].find_one({'_id': ObjectId(id)})
 
+    def _delete_one(self, collection_name, id):
+        return self.mongo.db[collection_name].delete_one({'_id': ObjectId(id)})
+
     def _find(self, collection_name, query={}):
         cursor = self.mongo.db[collection_name].find(query)
         return list(cursor)
@@ -35,23 +38,45 @@ class MongoUtils(object):
     def update_publisher_available_ad_spaces(self, publisher_id, ad_spaces):
         self.mongo.db['users'].update({'_id': ObjectId(publisher_id)}, {'$set': {'adSpaces': ad_spaces}})
 
+    def get_publisher_published_campaigns(self, publisher_id):
+        #TODO: date filter and status: published
+        return self.find_campaigns({'publisherId': publisher_id, 'status': 'published'})
+
+    def get_publisher_draft_campaigns(self, publisher_id):
+        #TODO: date filter and status: published
+        return self.find_campaigns({'publisherId': publisher_id, 'status': 'draft'})
 
     # CAMPAIGNS
     def insert_one_campaign(self, doc):
         return self._insert_one('campaigns', doc)
 
+    def find_one_campaign(self, id):
+        return self._find_one('campaigns', id)
+
+    def delete_one_campaign(self, id):
+        return self._delete_one('campaigns', id)
+
+    def set_campaign_as_published(self, id):
+        self.set_campaign_status(id, 'published')
+
+    def set_campaign_as_draft(self, id):
+        self.set_campaign_status(id, 'draft')
+
+    def set_campaign_status(self, id, status):
+        self.mongo.db['campaigns'].update({'_id': ObjectId(id)}, {'$set': {'status': status}})
+
     def find_campaigns(self, query={}):
-        return self._find(self, 'campaigns', query)
+        return self._find( 'campaigns', query)
 
     def insert_asset_url(self, campaign_id, asset_id, url):
         #campaign = self.find({'_id': ObjectId(campaign_id)})
 
-        self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
+        self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
 
     def get_ongoing_campaign(self):
         # Get list of eligible ad campaigns to return
         # TODO: add date filter
-        cursor = self.mongo.db.campaigns.find({ "$where": "this.impressions.count != this.impressions.goal" } )
+        cursor = self.mongo.db.campaigns.find({'status': 'published', '$where': 'this.impressions.count != this.impressions.goal' } )
         campaigns = list(cursor)
 
         # Select a random campaign from the list

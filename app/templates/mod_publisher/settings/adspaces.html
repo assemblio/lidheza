@@ -3,7 +3,7 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
-            <form action="{{ url_for('publisher.settings', pid=pid) }}" method="POST">
+            <form action="{{ url_for('publisher.settings_adspaces', pid=publisher._id) }}" method="POST">
                 <div class="form-group">
                     {{ form.available_ad_spaces.label }}
                     {{ form.available_ad_spaces() }}

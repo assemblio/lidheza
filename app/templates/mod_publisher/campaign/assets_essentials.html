@@ -21,6 +21,24 @@
 
 {% block script %}
     {{ super() }}
+    <script>
+    $(function() {
+        $( ".btn-delete" ).click(function() {
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').submit();
+        });
+
+        $( ".btn-draft" ).click(function() {
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_save_as_draft', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').submit();
+        });
+
+        $( ".btn-publish" ).click(function() {
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').submit();
+        });
+    });
+    </script>
 {% endblock %}
 
 
@@ -30,7 +48,7 @@
         <!-- LEADERBOARD 728x90 -->
         <div class="col-sm-12">
             <div id="dz-ad-container-728-90">
-                <form id="dz-ad-728-90" class="dropzone {{'disable' if 'leaderboard-728x90' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=pid, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                <form id="dz-ad-728-90" class="dropzone {{'disable' if 'leaderboard-728x90' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="asset_id" value="leaderboard-728x90">
                 </form>
             </div>
@@ -103,11 +121,11 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
-            <form action="{{ url_for('publisher.index', pid=pid) }}" method="GET">
-                <input type="button" class="btn btn-danger btn-cancel" value="Cancel and Delete">
-                <input type="button" class="btn btn-warning btn-draft" value="Save as Draft">
-                <input type="submit" class="btn btn-primary btn-finished" value="Finished">
+        <div class="col-sm-12 text-center">
+            <form class="form-submit" action="" method="POST">
+                <input type="submit" class="btn btn-danger btn-delete" value="Cancel and Delete">
+                <input type="submit" class="btn btn-warning btn-draft" value="Save as Draft">
+                <input type="submit" class="btn btn-primary btn-publish" value="Publish">
             </form>
         </div>
     </div>
