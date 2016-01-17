@@ -35,6 +35,13 @@
                     </div>
                 </div>
 
+                <div class="form-group {{"has-error" if form.impression_goal.errors }}">
+                    {{ form.impression_goal.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.impression_goal(class="form-control") }}
+                    </div>
+                </div>
+
                 <div class="form-group {{"has-error" if form.start_date.errors }}">
                     {{ form.start_date.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">

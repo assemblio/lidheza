@@ -36,7 +36,7 @@
         </div>
 
         <div class="col-sm-12">
-            <form action="{{ url_for('publisher.campaign_create', pid=publisher._id) }}" method="POST">
+            <form action="{{ url_for('publisher.campaign_create', pid=publisher._id) }}" method="GET">
                 <input type="submit" class="btn btn-success btn-campaign" value="New Campaign">
             </form>
         </div>
