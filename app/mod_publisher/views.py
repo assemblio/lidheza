@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for, current_app
-from app import mongo_utils
+from app import utils, mongo_utils
 from forms import ImpressionRateForm, CampaignForm, AssetForm, SettingsForm
 import datetime
 import os
@@ -172,7 +172,8 @@ def allowed_file(filename):
 @mod_publisher.route('/<pid>/ad-tags', methods=['GET'])
 def ad_tags(pid):
     publisher = mongo_utils.find_one_user(pid)
-    return render_template('mod_publisher/adtags.html', publisher=publisher)
+    available_ad_spaces = utils.available_ad_spaces(publisher)
+    return render_template('mod_publisher/adtags.html', publisher=publisher, available_ad_spaces=available_ad_spaces)
 
 
 
