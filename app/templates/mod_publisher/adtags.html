@@ -3,12 +3,21 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
-            <!-- Turn this into code sniplet
-            <div class="ldz ldz-500x400">
+            <!-- Turn this into code sniplet -->
+            <div>
                 <script>
                     window.onload = function () {
-                        var tag = document.getElementsByClassName('ldz-500x400')[0];
-                        tag.setAttribute('style', 'background-image: url("https://placehold.it/500x400");width:500px; height:400px;')
+                        // Get ad asset URL.
+                        var xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open( "GET", 'http://localhost:5002/fetch/500/400', false ); // false for synchronous request
+                        xmlHttp.send( null );
+                        var assetUrl = xmlHttp.responseText;
+
+                        // Set retrieved asset URL as background image URL for container div.
+                        var style = 'background-image: url("' + assetUrl + '");width:500px;height:400px;';
+                        var scripts = document.getElementsByTagName( 'script' );
+                        var tag = scripts[ scripts.length - 1 ].parentElement;
+                        tag.setAttribute('style', style)
                     }
                 </script>
             </div>
