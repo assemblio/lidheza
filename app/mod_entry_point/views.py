@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from forms import AdvertiserForm, PublisherForm, LoginForm
-from app import mongo_utils
+from app import utils, mongo_utils
 
 mod_entry_point = Blueprint('entrypoint', __name__)
 
@@ -64,9 +64,11 @@ def publisher():
             flash_errors(form)
             return render_template('mod_entry_point/publisher.html', form=form)
         else:
+
             publisher = {
                 'type': 'publisher',
                 'name': form.name.data,
+                'host': utils.get_host(form.website.data),
                 'phone': form.phone.data,
                 'email': form.email.data,
                 'password': form.password.data,

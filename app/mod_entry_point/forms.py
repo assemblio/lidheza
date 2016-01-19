@@ -41,6 +41,7 @@ class AdvertiserForm(Form):
 
 class PublisherForm(Form):
     name = StringField('Name', [validators.Required()])
+    website = StringField('Website', [validators.Required()])
     description = TextAreaField('Description')
 
     registration_number = StringField('Business Registration Number', [validators.Required()])

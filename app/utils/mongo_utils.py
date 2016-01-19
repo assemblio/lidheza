@@ -1,5 +1,7 @@
+from flask import current_app
 from random import randint
 from bson.objectid import ObjectId
+from datetime import datetime
 
 class MongoUtils(object):
 
@@ -40,11 +42,11 @@ class MongoUtils(object):
 
     def get_publisher_published_campaigns(self, publisher_id):
         #TODO: date filter and status: published
-        return self.find_campaigns({'publisherId': publisher_id, 'status': 'published'})
+        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'published'})
 
     def get_publisher_draft_campaigns(self, publisher_id):
         #TODO: date filter and status: published
-        return self.find_campaigns({'publisherId': publisher_id, 'status': 'draft'})
+        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'draft'})
 
     # CAMPAIGNS
     def insert_one_campaign(self, doc):
@@ -66,34 +68,46 @@ class MongoUtils(object):
         self.mongo.db['campaigns'].update({'_id': ObjectId(id)}, {'$set': {'status': status}})
 
     def find_campaigns(self, query={}):
-        return self._find( 'campaigns', query)
+        return self._find('campaigns', query)
 
     def insert_asset_url(self, campaign_id, asset_id, url):
-        #campaign = self.find({'_id': ObjectId(campaign_id)})
-
         self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
 
-    def get_ongoing_campaign(self):
+    def get_ongoing_campaign_asset_url_for_publisher(self, host, ad_id):
         # Get list of eligible ad campaigns to return
-        # TODO: add date filter
-        cursor = self.mongo.db.campaigns.find({'status': 'published', '$where': 'this.impressions.count != this.impressions.goal' } )
+        cursor = self.mongo.db['campaigns'].find({
+            'publisher.host': host,
+            'status': 'published',
+            'start': {
+                '$lte': datetime.now()
+            },
+            'end': {
+                '$gte': datetime.now()
+            },
+            '$where': 'this.impressions.count < this.impressions.goal'
+        })
         campaigns = list(cursor)
 
-        # Select a random campaign from the list
-        campaign = campaigns[randint(0,len(campaigns)-1)]
+        # There are no on-going campaigns
+        if len(campaigns) == 0:
+            return None
+        else:
 
-        # Update impression count for the selected campaign.
-        self._increment_impression(campaign['_id'])
+            # Select a random campaign from the list
+            campaign = campaigns[randint(0, len(campaigns)-1)]
 
-        # Remove ID
-        campaign.pop("_id", None)
+            # Update impression count for the selected campaign.
+            self._increment_impression(campaign['_id'])
 
-        return campaign
+            # Remove ID
+            campaign.pop("_id", None)
+
+            return campaign
 
 
     # IMPRESSION RATE
     def _increment_impression(self, campaign_id):
-        self.mongo.db.campaigns.update({'_id': ObjectId(campaign_id)}, {'$inc': {'impressions.count': 1}})
+        self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, {'$inc': {'impressions.count': 1}})
 
     def update_impression_rate(self, pid, rate):
         self.mongo.db['users'].update({'_id': ObjectId(pid)}, {'$set': {'impressionRate': rate}})

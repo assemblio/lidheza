@@ -66,7 +66,10 @@ def campaign_create(pid):
         else:
 
             campaign = {
-                'publisherId': pid,
+                'publisher':{
+                    'id': pid,
+                    'host': publisher['host']
+                },
                 'status': 'draft',
                 'name': form.campaign_name.data,
                 'url': form.url.data,

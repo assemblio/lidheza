@@ -1,3 +1,4 @@
+# coding=utf-8
 import argparse
 
 from flask import render_template
@@ -14,6 +15,17 @@ app = create_app()
 @app.errorhandler(400)
 def page_not_found(error):
     return render_template('errors/400.html'), 400
+
+# Define custom filters
+def thousands_seperator(number):
+    return '{0:,}'.format(number)
+
+def to_currency(number):
+    return '€ {:,.2f}'.format(number)
+
+# Register custom filters
+app.jinja_env.filters['thousands_seperator'] = thousands_seperator
+app.jinja_env.filters['to_currency'] = to_currency
 
 # Run the app
 if __name__ == '__main__':

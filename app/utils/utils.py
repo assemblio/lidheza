@@ -1,3 +1,5 @@
+from urlparse import urlparse
+
 class Utils(object):
 
     def ad_spaces(self):
@@ -13,12 +15,6 @@ class Utils(object):
                 'label': 'Full Banner 468x60',
                 'width': 468,
                 'height': 60,
-            },
-            {
-                'id': 'leaderboard-728x90',
-                'label': 'Leaderboard 728x90',
-                'width': 728,
-                'height': 90,
             },
             {
                 'id': 'half-page-300x600',
@@ -56,3 +52,13 @@ class Utils(object):
                 available_ad_spaces.append(ad_space)
 
         return available_ad_spaces
+
+    def get_host(self, url):
+        parsed_website = urlparse(url)
+        host = parsed_website.netloc
+
+        # If host is something like: xxx.foo.bar then we just want foo.bar
+        if len(host.split('.')) == 3:
+            host = host[host.index('.')+1:]
+
+        return host

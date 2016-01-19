@@ -8,40 +8,30 @@
     <script src="{{ url_for('static', filename='prismjs/prism.js') }}"></script>
 {% endblock %}
 
-<!-- Template non uglyfied ad tag: -->
+<!-- Template of non-uglified ad tag: -->
 <!--
 window.onload = function () {
-    // Get ad asset URL.
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", 'http://lidheza.com/fetch/500/400', false ); // false for synchronous request
+    xmlHttp.open( "GET", 'http://lidheza.com/fetch/leaderboard-728x90', false ); // false for synchronous request
     xmlHttp.send( null );
-    var assetUrl = xmlHttp.responseText;
-
-    // Set retrieved asset URL as background image URL for container div.
-    var style = 'background-image: url("' + assetUrl + '");width:500px;height:400px;';
-    var scripts = document.getElementsByTagName( 'script' );
-    var tag = scripts[ scripts.length - 1 ].parentElement;
-    tag.setAttribute('style', style);
+    document.write(xmlHttp.responseText);
 }
 -->
 
 {% block rows %}
-<div class="row" style="padding:0 20% 0 20%;">
+<div class="row" style="padding:0 14% 0 14%;">
     {% for available_ad_space in available_ad_spaces %}
         <div class="col-sm-12">
             <h3>{{ available_ad_space['label'] }}</h3>
             <div>
                 <pre>
 <code class="language-markup">
-&lt;script&gt;
-    window.onload=function(){
-        var a=new XMLHttpRequest;
-        a.open("GET","http://lidheza.com/fetch/{{ available_ad_space['width'] }}/{{ available_ad_space['height'] }}",!1),a.send(null);
-        var b=a.responseText,c="background-image: url('"+b+"');width:{{ available_ad_space['width'] }}px;height:{{ available_ad_space['height'] }}px;";
-        var d=document.getElementsByTagName("script"),e=d[d.length-1].parentElement;
-        e.setAttribute("style",c);
-    };
-&lt;/script&gt;
+&lt;div&gt;
+  &lt;script&gt;
+    var a=new XMLHttpRequest;a.open("GET","http://lidheza.com/fetch/{{ available_ad_space['id'] }}",!1),a.send(null),
+    document.write(a.responseText);
+  &lt;/script&gt;
+&lt;/div&gt;
 </code>
                 </pre>
             </div>

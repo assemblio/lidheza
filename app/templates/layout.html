@@ -64,7 +64,7 @@
                     </div>
                     <button type="submit" class="btn btn-default">login</button>
                 </form>
-                {% else %}
+                {% elif publisher %}
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url_for('publisher.ad_tags', pid=publisher._id) }}">Ad Tags</a></li>
                     <li class="dropdown">

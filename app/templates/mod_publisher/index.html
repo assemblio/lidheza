@@ -74,13 +74,13 @@
                             {{ campaign.end.strftime('%d-%b-%Y') }}
                         </td>
                         <td>
-                            {{ campaign.impressions.count }} / {{ campaign.impressions.goal }}
+                            {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{ campaign.impressions.count * campaign.impressions.rate }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            {{ campaign.impressions.goal * campaign.impressions.rate }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency  }}
                         </td>
                     </tr>
                 </tbody>
@@ -123,13 +123,13 @@
                             {{ campaign.end.strftime('%d-%b-%Y') }}
                         </td>
                         <td>
-                            {{ campaign.impressions.count }} / {{ campaign.impressions.goal }}
+                            {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{ campaign.impressions.count * campaign.impressions.rate }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            {{ campaign.impressions.goal * campaign.impressions.rate }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency  }}
                         </td>
                     </tr>
                 </tbody>
