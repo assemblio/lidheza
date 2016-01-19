@@ -44,6 +44,11 @@
 
 {% block rows %}
 <div align="center">
+    <div class="alert alert-danger alert-expected-dimension">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Wrong image dimension:</strong> <span style="font-weight:normal;">Should be <span id="expected-dimension"></span>. Please resize and upload again.</span>
+    </div>
+
     <div class="row">
         <!-- LEADERBOARD 728x90 -->
         <div class="col-sm-12">

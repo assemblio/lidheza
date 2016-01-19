@@ -98,6 +98,8 @@
 
 
     $( document ).ready(function() {
+        $(".alert-expected-dimension").hide();
+
         var adSizes = {
             '728-90': 'Leaderboard',
             '468-60': 'Full Banner',
@@ -116,18 +118,43 @@
 
         for(var size in adSizes){
             if($("#dz-ad-" + size) != undefined){
+
                 var width = parseInt(size.split('-')[0]);
                 var height = parseInt(size.split('-')[1]);
-
                 var message = "<span class='dz-ad-message'>" + adSizes[size] + "<br>" + size.replace('-', 'x') + "</span>";
 
                 $("#dz-ad-" + size).dropzone({
                     init: function() {
                         // If there's already an image on the dropzone,
                         // then simply remove it and replace it with new one.
-                        this.on("addedfile", function() {
+                        this.on("addedfile", function(file) {
+                            // Event: When a file is added to the list
+
                             if (this.files[1]!=null){
                                 this.removeFile(this.files[0]);
+                            }
+                        });
+
+                        this.on("thumbnail", function (file) {
+                            var blah = this;
+                            var assetId = $($('#' + this.element.id +  ' input')[0]).attr('value');
+
+                            var assetDimensionStr = assetId.split('-')[assetId.split('-').length-1];
+                            var assetDimensions = assetDimensionStr.split('x');
+
+                            var width = parseInt(assetDimensions[0]);
+                            var height = parseInt(assetDimensions[1]);
+
+                            if (file.height != height && file.width != width) {
+                                this.removeFile(file);
+
+                                $.post( "{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign_id, asset_id='') }}" + assetId, function( data ) {
+                                    $('#expected-dimension').html(assetDimensionStr);
+
+                                    $(".alert-expected-dimension").fadeTo(2200, 1000).fadeOut(500, function(){
+                                        $(".alert-expected-dimension").hide();
+                                    });
+                                });
                             }
                         });
                     },

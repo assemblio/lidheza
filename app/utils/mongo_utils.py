@@ -73,6 +73,9 @@ class MongoUtils(object):
     def insert_asset_url(self, campaign_id, asset_id, url):
         self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, {'$set': {'assets.%s' % asset_id: url}})
 
+    def remove_asset_url(self, campaign_id, asset_id):
+        self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, { '$unset': { 'assets.%s' % asset_id: ""}})
+
     def get_ongoing_campaign_asset_url_for_publisher(self, host, ad_id):
         # Get list of eligible ad campaigns to return
         cursor = self.mongo.db['campaigns'].find({

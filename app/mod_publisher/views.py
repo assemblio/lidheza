@@ -130,6 +130,11 @@ def settings_adspaces(pid):
         return redirect(url_for('publisher.index', pid=pid))
 
 
+@mod_publisher.route('/<pid>/campaign/<campaign_id>/assets/remove/<asset_id>', methods=['POST'])
+def remove_campaign_asset_reference(pid, campaign_id, asset_id):
+    mongo_utils.remove_asset_url(campaign_id, asset_id)
+    return ('', 204)
+
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/assets/upload', methods=['POST'])
 def upload_campaign_asset(pid, campaign_id):
     file = request.files['file']
@@ -137,6 +142,7 @@ def upload_campaign_asset(pid, campaign_id):
     try:
         if file and allowed_file(file.filename):
 
+            #TODO: Check if image dimensions are correct. Continue if they are, cancel image file creation if they are not.
             form = AssetForm(request.form)
             asset_id = form.asset_id.data
 
