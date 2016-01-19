@@ -125,18 +125,23 @@
 
                 $("#dz-ad-" + size).dropzone({
                     init: function() {
-                        // If there's already an image on the dropzone,
-                        // then simply remove it and replace it with new one.
+                        // Event: When a file is added to the list.
                         this.on("addedfile", function(file) {
-                            // Event: When a file is added to the list
-
+                            // If there's already an image on the dropzone,
+                            // then simply remove it and replace it with new one.
                             if (this.files[1]!=null){
                                 this.removeFile(this.files[0]);
                             }
                         });
 
+                        // Event: When a file is removed from the list.
+                        this.on("removedfile", function(file) {
+                            var assetId = $($('#' + this.element.id +  ' input')[0]).attr('value');
+                            $.post("{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign_id, asset_id='') }}" + assetId);
+                        });
+
+                        // Event: When the thumbnail has been generated.
                         this.on("thumbnail", function (file) {
-                            var blah = this;
                             var assetId = $($('#' + this.element.id +  ' input')[0]).attr('value');
 
                             var assetDimensionStr = assetId.split('-')[assetId.split('-').length-1];
