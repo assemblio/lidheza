@@ -94,6 +94,57 @@ def campaign_assets(pid, campaign_id):
     form = AssetForm()
     return render_template('mod_publisher/campaign/assets_essentials.html', publisher=publisher, campaign_id=campaign_id, form=form)
 
+
+@mod_publisher.route('/<pid>/campaign/<campaign_id>/edit', methods=['GET', 'POST'])
+def campaign_edit(pid, campaign_id):
+    publisher = mongo_utils.find_one_user(pid)
+    campaign = mongo_utils.find_one_campaign(campaign_id)
+
+    if request.method == 'GET':
+        form = CampaignForm()
+        form.id.data = campaign_id
+        form.campaign_name.data = campaign['name']
+        form.url.data = campaign['url']
+        form.start_date.data = campaign['start']
+        form.end_date.data = campaign['end']
+        form.impression_rate.data = campaign['impressions']['rate']
+        form.impression_goal.data = campaign['impressions']['goal']
+
+        published = True if campaign['status'] == 'published' else False
+
+        return render_template('mod_publisher/campaign/create.html', publisher=publisher, form=form, edit=True, published=published)
+    else:
+        form = CampaignForm(request.form)
+
+        if campaign['status'] == 'published':
+            # If the campaign is already published, we can only edit: name, url, end date, and impressions goals.
+            update = {
+                'name': form.campaign_name.data,
+                'url': form.url.data,
+                'end': datetime.datetime.combine(form.end_date.data, datetime.time(23, 59)),
+                'impressions.goal': int(form.impression_goal.data)
+            }
+
+            mongo_utils.update_one_campaign(campaign_id, update)
+
+        elif campaign['status'] == 'draft':
+            # If the campaign is still in draft, we can edit everything.
+            update = {
+                'name': form.campaign_name.data,
+                'url': form.url.data,
+                'start': datetime.datetime.combine(form.start_date.data, datetime.time(00, 00)),
+                'end': datetime.datetime.combine(form.end_date.data, datetime.time(23, 59)),
+                'impressions.rate': float(form.impression_rate.data),
+                'impressions.goal': int(form.impression_goal.data)
+            }
+
+            mongo_utils.update_one_campaign(campaign_id, update)
+
+        else:
+            pass
+
+        return redirect(url_for('publisher.campaign_assets', pid=pid, campaign_id=campaign_id))
+
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/delete', methods=['POST'])
 def campaign_delete(pid, campaign_id):
     mongo_utils.delete_one_campaign(campaign_id)

@@ -8,6 +8,7 @@
         opacity: 0.6;
         pointer-events: none;
     }
+
     </style>
 {% endblock %}
 
@@ -41,7 +42,11 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
+            {% if edit %}
+            <form class="form-horizontal" action="{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id=form.id.data) }}" method="POST">
+            {% else %}
             <form class="form-horizontal" action="{{ url_for('publisher.campaign_create', pid=publisher._id ) }}" method="POST">
+            {% endif %}
 
                 <div class="form-group {{"has-error" if form.campaign_name.errors }}">
                     {{ form.campaign_name.label(class="control-label col-sm-4") }}
@@ -60,7 +65,11 @@
                 <div class="form-group {{"has-error" if form.impression_rate.errors }}">
                     {{ form.impression_rate.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">
-                        {{ form.impression_rate(class="form-control") }}
+                        {% if published %}
+                            {{ form.impression_rate(class="form-control disable") }}
+                        {% else %}
+                            {{ form.impression_rate(class="form-control") }}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -81,7 +90,11 @@
                 <div class="form-group {{"has-error" if form.start_date.errors }}">
                     {{ form.start_date.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">
-                        {{ form.start_date(class="form-control") }}
+                        {% if published %}
+                            {{ form.start_date(class="form-control disable") }}
+                        {% else %}
+                            {{ form.start_date(class="form-control") }}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -96,7 +109,11 @@
                     <div class="col-sm-12">
                         <div class="pull-right">
                             <input type="button" class="btn btn-warning" value="Cancel">
-                            <input type="submit" class="btn btn-primary" value="Continue">
+                            {% if edit %}
+                                <input type="submit" class="btn btn-primary btn-edit" value="Update">
+                            {% else %}
+                                <input type="submit" class="btn btn-primary btn-create" value="Create">
+                            {% endif %}
                         </div>
                     </div>
                 </div>

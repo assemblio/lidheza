@@ -8,6 +8,7 @@ class ImpressionRateForm(Form):
     rate = DecimalField('Default Rate', [validators.Required()])
 
 class CampaignForm(Form):
+    id = HiddenField('ID')
     campaign_name = StringField('Campaign Name', [validators.Required()])
     url = StringField('URL', [validators.Required()])
     start_date = DateField('Start Date', [validators.Required()], format='%d/%m/%Y')

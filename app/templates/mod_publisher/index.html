@@ -1,5 +1,20 @@
 {% extends "layout.html" %}
 
+{% block script %}
+    <script>
+        $(function() {
+            $( ".btn-edit-draft" ).click(function() {
+                var campaign_id = $('.form-draft input[id=edit-draft-campaign-id]').val();
+                var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX',  campaign_id)
+                $('.form-draft').attr('action', action);
+                $('.form-draft').submit();
+            });
+        });
+
+    </script>
+    {# $.get( "{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id="" ) }}" ); #}
+{% endblock %}
+
 {% block rows %}
     <div class="row">
         <div class="col-sm-12">
@@ -53,6 +68,7 @@
                         <th>Impressions</th>
                         <th>Current Revenue</th>
                         <th>Projected Revenue</th>
+                        <th>Operations</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,7 +96,15 @@
                             {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency  }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-primary btn-sm" aria-label="Edit">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-danger btn-sm" aria-label="Stop">
+                                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -102,6 +126,7 @@
                         <th>Impressions</th>
                         <th>Current Revenue</th>
                         <th>Projected Revenue</th>
+                        <th>Operations</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,7 +154,20 @@
                             {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency  }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                        </td>
+                        <td>
+                            <form class="form-draft" action="" method="GET">
+                                <input type="hidden" id="edit-draft-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-draft" aria-label="Edit">
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                {% if campaign.assets and campaign.assets|length > 0 %}
+                                <button type="button" class="btn btn-default btn-success btn-sm btn-play-draft" aria-label="Play">
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                                {% endif %}
+                            </form>
                         </td>
                     </tr>
                 </tbody>

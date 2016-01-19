@@ -26,6 +26,7 @@
         $( ".btn-delete" ).click(function() {
             $('.form-submit').attr('action', '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id=campaign_id) }}' )
             $('.form-submit').submit();
+
         });
 
         $( ".btn-draft" ).click(function() {

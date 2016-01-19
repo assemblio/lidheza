@@ -17,6 +17,9 @@ class MongoUtils(object):
     def _find_one(self, collection_name, id):
         return self.mongo.db[collection_name].find_one({'_id': ObjectId(id)})
 
+    def _update_one(self, collection_name, id, update):
+        return self.mongo.db[collection_name].update({'_id': ObjectId(id)}, {'$set': update})
+
     def _delete_one(self, collection_name, id):
         return self.mongo.db[collection_name].delete_one({'_id': ObjectId(id)})
 
@@ -57,6 +60,9 @@ class MongoUtils(object):
 
     def delete_one_campaign(self, id):
         return self._delete_one('campaigns', id)
+
+    def update_one_campaign(self, id, update):
+        return self._update_one('campaigns', id, update)
 
     def set_campaign_as_published(self, id):
         self.set_campaign_status(id, 'published')
