@@ -133,7 +133,7 @@
                         if(assetId in previously_uploaded_assets){
                             var assetUrl = "http://localhost:5002/" + previously_uploaded_assets[assetId];
 
-                            var mockFile = { name: assetId, size: 12345, type: 'image/jpg' };
+                            var mockFile = { name: assetId, size: 12345 };
                             this.options.addedfile.call(this, mockFile);
 
                             //console.log(assetUrl);
