@@ -134,27 +134,16 @@
                             var assetUrl = "http://localhost:5002/" + previously_uploaded_assets[assetId];
 
                             var mockFile = { name: assetId, size: 12345 };
+
                             this.options.addedfile.call(this, mockFile);
-
-                            //console.log(assetUrl);
                             this.options.thumbnail.call(this, mockFile, assetUrl);
-
                             this.files.push(mockFile);
 
+                            // Remove lingering progress bar.
                             $($('#dz-ad-' + size + ' .dz-preview')[0]).addClass('dz-complete');
 
-                            // Call the default addedfile event handler
-                            //this.emit("addedfile", mockFile);
-
-                            //And optionally show the thumbnail of the file:
-                            //this.emit("thumbnail", mockFile,  assetUrl);
                         }
 
-                        /*
-
-
-                        this.options.thumbnail.call(this, mockFile, "http://someserver.com/myimage.jpg");
-                         */
                         // Event: When a file is added to the list.
                         this.on("addedfile", function(file) {
                             // If there's already an image on the dropzone,
@@ -199,8 +188,6 @@
                     thumbnailHeight: height,
                     dictDefaultMessage: message
                 });
-
-                console.log(dz);
 
                 $("#dz-ad-" + size).css('width', width + 4); // + 4 to account for borders (2 x 2px)
                 $("#dz-ad-" + size).css('height', height + 25); // +4 to account for borders and +21 for the remove link.
