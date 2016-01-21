@@ -4,15 +4,33 @@
     <script>
         $(function() {
             $( ".btn-edit-draft" ).click(function() {
-                var campaign_id = $('.form-draft input[id=edit-draft-campaign-id]').val();
-                var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX',  campaign_id)
+                editCampaign('.form-draft', 'draft-campaign-id');
+            });
+
+            $( ".btn-edit-published" ).click(function() {
+                editCampaign('.form-published', 'published-campaign-id');
+            });
+
+            $( ".btn-play-draft" ).click(function() {
+                var campaign_id = $('.form-draft input[id=draft-campaign-id]').val();
+                var method = 'POST';
+                var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+                $('.form-draft').attr('method', method);
                 $('.form-draft').attr('action', action);
                 $('.form-draft').submit();
             });
+
+            function editCampaign(formClass, campaignIDFormElementInputId){
+                var campaign_id = $(formClass + ' input[id=' + campaignIDFormElementInputId + ']').val();
+                var method = 'GET';
+                var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+                $(formClass).attr('method', method);
+                $(formClass).attr('action', action);
+                $(formClass).submit();
+            }
         });
 
     </script>
-    {# $.get( "{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id="" ) }}" ); #}
 {% endblock %}
 
 {% block rows %}
@@ -99,12 +117,15 @@
                             {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            <button type="button" class="btn btn-default btn-primary btn-sm" aria-label="Edit">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-danger btn-sm" aria-label="Stop">
-                                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
-                            </button>
+                            <form class="form-published" action="" method="">
+                                <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-published" aria-label="Edit">
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-danger btn-sm btn-stop-published" aria-label="Stop">
+                                    <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
@@ -157,8 +178,8 @@
                             {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
                         </td>
                         <td>
-                            <form class="form-draft" action="" method="GET">
-                                <input type="hidden" id="edit-draft-campaign-id" value="{{ campaign._id }}"/>
+                            <form class="form-draft" action="" method="">
+                                <input type="hidden" id="draft-campaign-id" value="{{ campaign._id }}"/>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-draft" aria-label="Edit">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
