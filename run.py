@@ -3,6 +3,7 @@ import argparse
 
 from flask import render_template
 from app import create_app
+import json
 
 import sys
 
@@ -23,9 +24,13 @@ def thousands_seperator(number):
 def to_currency(number):
     return '€ {:,.2f}'.format(number)
 
+def json_dumps(doc):
+    return json.dumps(doc)
+
 # Register custom filters
 app.jinja_env.filters['thousands_seperator'] = thousands_seperator
 app.jinja_env.filters['to_currency'] = to_currency
+app.jinja_env.filters['json_dumps'] = json_dumps
 
 # Run the app
 if __name__ == '__main__':

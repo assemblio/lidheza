@@ -117,14 +117,44 @@
         Dropzone.autoDiscover = false;
 
         for(var size in adSizes){
-            if($("#dz-ad-" + size) != undefined){
+            if($("#dz-ad-" + size).length > 0){
 
                 var width = parseInt(size.split('-')[0]);
                 var height = parseInt(size.split('-')[1]);
                 var message = "<span class='dz-ad-message'>" + adSizes[size] + "<br>" + size.replace('-', 'x') + "</span>";
 
-                $("#dz-ad-" + size).dropzone({
+                var dz = $("#dz-ad-" + size).dropzone({
                     init: function() {
+
+                        // First we need to check if this ad type has a previously uploaded asset already (when we are in edit mode).
+                        var assetId = $($('#dz-ad-' + size + ' input')[0]).attr('value');
+                        var previously_uploaded_assets = {{ campaign.assets|json_dumps|safe }};
+
+                        if(assetId in previously_uploaded_assets){
+                            var assetUrl = "http://localhost:5002/" + previously_uploaded_assets[assetId];
+
+                            var mockFile = { name: assetId, size: 12345, type: 'image/jpg' };
+                            this.options.addedfile.call(this, mockFile);
+
+                            //console.log(assetUrl);
+                            this.options.thumbnail.call(this, mockFile, assetUrl);
+
+                            this.files.push(mockFile);
+
+                            $($('#dz-ad-' + size + ' .dz-preview')[0]).addClass('dz-complete');
+
+                            // Call the default addedfile event handler
+                            //this.emit("addedfile", mockFile);
+
+                            //And optionally show the thumbnail of the file:
+                            //this.emit("thumbnail", mockFile,  assetUrl);
+                        }
+
+                        /*
+
+
+                        this.options.thumbnail.call(this, mockFile, "http://someserver.com/myimage.jpg");
+                         */
                         // Event: When a file is added to the list.
                         this.on("addedfile", function(file) {
                             // If there's already an image on the dropzone,
@@ -137,7 +167,7 @@
                         // Event: When a file is removed from the list.
                         this.on("removedfile", function(file) {
                             var assetId = $($('#' + this.element.id +  ' input')[0]).attr('value');
-                            $.post("{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign_id, asset_id='') }}" + assetId);
+                            $.post("{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign._id, asset_id='') }}" + assetId);
                         });
 
                         // Event: When the thumbnail has been generated.
@@ -153,7 +183,7 @@
                             if (file.height != height && file.width != width) {
                                 this.removeFile(file);
 
-                                $.post( "{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign_id, asset_id='') }}" + assetId, function( data ) {
+                                $.post( "{{ url_for('publisher.remove_campaign_asset_reference', pid=publisher._id, campaign_id=campaign._id, asset_id='') }}" + assetId, function( data ) {
                                     $('#expected-dimension').html(assetDimensionStr);
 
                                     $(".alert-expected-dimension").fadeTo(2200, 1000).fadeOut(500, function(){
@@ -169,6 +199,8 @@
                     thumbnailHeight: height,
                     dictDefaultMessage: message
                 });
+
+                console.log(dz);
 
                 $("#dz-ad-" + size).css('width', width + 4); // + 4 to account for borders (2 x 2px)
                 $("#dz-ad-" + size).css('height', height + 25); // +4 to account for borders and +21 for the remove link.

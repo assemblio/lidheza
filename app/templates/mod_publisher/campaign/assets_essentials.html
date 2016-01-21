@@ -24,18 +24,18 @@
     <script>
     $(function() {
         $( ".btn-delete" ).click(function() {
-            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id=campaign._id) }}' )
             $('.form-submit').submit();
 
         });
 
         $( ".btn-draft" ).click(function() {
-            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_save_as_draft', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_save_as_draft', pid=publisher._id, campaign_id=campaign._id) }}' )
             $('.form-submit').submit();
         });
 
         $( ".btn-publish" ).click(function() {
-            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id=campaign_id) }}' )
+            $('.form-submit').attr('action', '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id=campaign._id) }}' )
             $('.form-submit').submit();
         });
     });
@@ -54,7 +54,7 @@
         <!-- LEADERBOARD 728x90 -->
         <div class="col-sm-12">
             <div id="dz-ad-container-728-90">
-                <form id="dz-ad-728-90" class="dropzone {{'disable' if 'leaderboard-728x90' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                <form id="dz-ad-728-90" class="dropzone {{'disable' if 'leaderboard-728x90' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="asset_id" value="leaderboard-728x90">
                 </form>
             </div>
@@ -71,7 +71,7 @@
                                 <!-- FULL BANNER 468x60 -->
                                 <td colspan="2" style="padding-bottom:22px;">
                                     <div id="dz-ad-container-468-60">
-                                        <form id="dz-ad-468-60" class="dropzone {{'disable' if 'full-banner-468x60' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                                        <form id="dz-ad-468-60" class="dropzone {{'disable' if 'full-banner-468x60' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="asset_id" value="full-banner-468x60">
                                         </form>
                                     </div>
@@ -81,7 +81,7 @@
                                 <td>
                                     <!-- HALF-PAGE AD 300x600 -->
                                     <div id="dz-ad-container-300-600">
-                                        <form id="dz-ad-300-600" class="dropzone {{'disable' if 'half-page-300x600' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                                        <form id="dz-ad-300-600" class="dropzone {{'disable' if 'half-page-300x600' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="asset_id" value="half-page-300x600">
                                         </form>
                                     </div>
@@ -89,7 +89,7 @@
                                 <td>
                                     <!-- WIDE SKYSCRAPER 160x600 -->
                                     <div id="dz-ad-container-160-600">
-                                        <form id="dz-ad-160-600" class="dropzone {{'disable' if 'wide-skyscraper-160x160' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                                        <form id="dz-ad-160-600" class="dropzone {{'disable' if 'wide-skyscraper-160x160' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="asset_id" value="wide-skyscraper-160x160">
                                         </form>
                                     </div>
@@ -103,7 +103,7 @@
                                 <td>
                                     <!-- VERTICAL RECTANGLE 240x400 -->
                                     <div id="dz-ad-container-240-400">
-                                        <form id="dz-ad-240-400" class="dropzone {{'disable' if 'vertical-rectangle-240x400' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                                        <form id="dz-ad-240-400" class="dropzone {{'disable' if 'vertical-rectangle-240x400' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="asset_id" value="vertical-rectangle-240x400">
                                         </form>
                                     </div>
@@ -113,7 +113,7 @@
                                 <td style="padding-top:22px;">
                                     <!-- MEDIUM RECTANGLE 300x250 -->
                                     <div id="dz-ad-container-300-250">
-                                        <form id="dz-ad-300-250" class="dropzone {{'disable' if 'medium-rectangle-300x250' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign_id) }}" enctype="multipart/form-data" method="POST">
+                                        <form id="dz-ad-300-250" class="dropzone {{'disable' if 'medium-rectangle-300x250' not in publisher.adSpaces}}" action="{{ url_for('publisher.upload_campaign_asset', pid=publisher._id, campaign_id=campaign._id) }}" enctype="multipart/form-data" method="POST">
                                             <input type="hidden" name="asset_id" value="medium-rectangle-300x250">
                                         </form>
                                     </div>

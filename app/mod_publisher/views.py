@@ -79,7 +79,8 @@ def campaign_create(pid):
                     'rate': float(form.impression_rate.data),
                     'goal': int(form.impression_goal.data),
                     'count': 0
-                }
+                },
+                'assets': []
             }
 
             campaign_id = mongo_utils.insert_one_campaign(campaign)
@@ -91,8 +92,12 @@ def campaign_create(pid):
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/assets', methods=['GET'])
 def campaign_assets(pid, campaign_id):
     publisher = mongo_utils.find_one_user(pid)
+    campaign = mongo_utils.find_one_campaign(campaign_id)
+
+    assets = campaign['assets']
+
     form = AssetForm()
-    return render_template('mod_publisher/campaign/assets_essentials.html', publisher=publisher, campaign_id=campaign_id, form=form)
+    return render_template('mod_publisher/campaign/assets_essentials.html', publisher=publisher, campaign=campaign, form=form)
 
 
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/edit', methods=['GET', 'POST'])
