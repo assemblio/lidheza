@@ -128,7 +128,7 @@
 
                         // First we need to check if this ad type has a previously uploaded asset already (when we are in edit mode).
                         var assetId = $($('#dz-ad-' + size + ' input')[0]).attr('value');
-                        var previously_uploaded_assets = {{ campaign.assets|json_dumps|safe }};
+                        var previously_uploaded_assets = {{ campaign.assets|tojson|safe }};
 
                         if(assetId in previously_uploaded_assets){
                             var assetUrl = "http://localhost:5002/" + previously_uploaded_assets[assetId];
