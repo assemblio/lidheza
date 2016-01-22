@@ -44,16 +44,34 @@ class MongoUtils(object):
         self.mongo.db['users'].update({'_id': ObjectId(publisher_id)}, {'$set': {'adSpaces': ad_spaces}})
 
     def get_publisher_published_campaigns(self, publisher_id):
-        #TODO: date filter and status: published
-        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'published'})
+        return self.find_campaigns({
+            'publisher.id': publisher_id,
+            'status': 'published',
+            'start': {
+                '$lte': datetime.now()
+            },
+            'end': {
+                '$gte': datetime.now()
+            }
+        })
 
     def get_publisher_stopped_campaigns(self, publisher_id):
-        #TODO: date filter and status: stopped
-        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'stopped'})
+        return self.find_campaigns({
+            'publisher.id': publisher_id,
+            'status': 'stopped',
+            'start': {
+                '$lte': datetime.now()
+            },
+            'end': {
+                '$gte': datetime.now()
+            }
+        })
 
     def get_publisher_draft_campaigns(self, publisher_id):
-        #TODO: date filter and status: draft
-        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'draft'})
+        return self.find_campaigns({
+            'publisher.id': publisher_id,
+            'status': 'draft'
+        })
 
     # CAMPAIGNS
     def insert_one_campaign(self, doc):
