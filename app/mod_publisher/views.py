@@ -96,8 +96,6 @@ def campaign_assets(pid, campaign_id):
     publisher = mongo_utils.find_one_user(pid)
     campaign = mongo_utils.find_one_campaign(campaign_id)
 
-    assets = campaign['assets']
-
     form = AssetForm()
     return render_template('mod_publisher/campaign/assets_essentials.html', publisher=publisher, campaign=campaign, form=form)
 
@@ -206,6 +204,8 @@ def upload_campaign_asset(pid, campaign_id):
         if file and allowed_file(file.filename):
 
             #TODO: Check if image dimensions are correct. Continue if they are, cancel image file creation if they are not.
+            #This is currently being done on the front end.
+
             form = AssetForm(request.form)
             asset_id = form.asset_id.data
 

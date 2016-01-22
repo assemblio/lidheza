@@ -41,7 +41,10 @@ class MongoUtils(object):
         return self._find('users', query)
 
     def update_publisher_available_ad_spaces(self, publisher_id, ad_spaces):
-        self.mongo.db['users'].update({'_id': ObjectId(publisher_id)}, {'$set': {'adSpaces': ad_spaces}})
+        self.mongo.db['users'].update(
+            {'_id': ObjectId(publisher_id)},
+            {'$set': {'adSpaces': ad_spaces}
+        })
 
     def get_publisher_published_campaigns(self, publisher_id):
         return self.find_campaigns({
