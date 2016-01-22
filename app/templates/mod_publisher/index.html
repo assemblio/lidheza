@@ -96,6 +96,7 @@
 
 
         <!-- PUBLISHED -->
+        {% if published_campaigns|length > 0 %}
         <div class="col-sm-12">
             <h3>Published</h3>
             <hr>
@@ -156,10 +157,11 @@
                 {% endfor %}
             </table>
         </div>
-
+        {% endif %}
 
 
         <!-- STOPPED -->
+        {% if stopped_campaigns|length > 0 %}
         <div class="col-sm-12">
             <h3>Stopped</h3>
             <hr>
@@ -220,9 +222,11 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
 
 
         <!-- DRAFTS -->
+        {% if draft_campaigns|length > 0 %}
         <div class="col-sm-12">
             <h3>Drafts</h3>
             <hr>
@@ -285,5 +289,6 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
