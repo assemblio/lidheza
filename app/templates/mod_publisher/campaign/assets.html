@@ -131,7 +131,7 @@
                         var previously_uploaded_assets = {{ campaign.assets|tojson|safe }};
 
                         if(assetId in previously_uploaded_assets){
-                            var assetUrl = "http://localhost:5002/" + previously_uploaded_assets[assetId];
+                            var assetUrl = "{{ config['SERVER_HOST'] }}/" + previously_uploaded_assets[assetId];
 
                             var mockFile = { name: assetId, size: 12345 };
 
