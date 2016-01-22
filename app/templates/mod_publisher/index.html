@@ -3,28 +3,51 @@
 {% block script %}
     <script>
         $(function() {
-            $( ".btn-edit-draft" ).click(function() {
-                editCampaign('.form-draft', 'draft-campaign-id');
+
+            $( ".btn-edit-stopped" ).click(function() {
+                editCampaign('.form-stopped', 'stopped-campaign-id');
             });
 
             $( ".btn-edit-published" ).click(function() {
                 editCampaign('.form-published', 'published-campaign-id');
             });
 
-            $( ".btn-play-draft" ).click(function() {
-                var campaign_id = $('.form-draft input[id=draft-campaign-id]').val();
-                var method = 'POST';
-                var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
-                $('.form-draft').attr('method', method);
-                $('.form-draft').attr('action', action);
-                $('.form-draft').submit();
+            $( ".btn-edit-draft" ).click(function() {
+                editCampaign('.form-draft', 'draft-campaign-id');
             });
+
+            $( ".btn-play-draft" ).click(function() {
+                publishCampaign('.form-draft', 'draft-campaign-id');
+            });
+
+            $( ".btn-play-stopped" ).click(function() {
+                publishCampaign('.form-stopped', 'stopped-campaign-id');
+
+            });
+
+            $( ".btn-stop-published" ).click(function() {
+                var campaign_id = $('.form-published input[id=published-campaign-id]').val();
+                var action = '{{ url_for('publisher.campaign_stop', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+
+                $('.form-published').attr('method', 'POST');
+                $('.form-published').attr('action', action);
+                $('.form-published').submit();
+            });
+
+            function publishCampaign(formClass, campaignIDFormElementInputId){
+                var campaign_id = $(formClass + ' input[id=' + campaignIDFormElementInputId + ']').val();
+                var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+
+                $(formClass).attr('method', 'POST');
+                $(formClass).attr('action', action);
+                $(formClass).submit();
+            }
 
             function editCampaign(formClass, campaignIDFormElementInputId){
                 var campaign_id = $(formClass + ' input[id=' + campaignIDFormElementInputId + ']').val();
-                var method = 'GET';
                 var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
-                $(formClass).attr('method', method);
+
+                $(formClass).attr('method', 'GET');
                 $(formClass).attr('action', action);
                 $(formClass).submit();
             }
@@ -72,8 +95,9 @@
         </div>
 
 
+        <!-- PUBLISHED -->
         <div class="col-sm-12">
-            <h3>Published:</h3>
+            <h3>Published</h3>
             <hr>
             <table class="table table-striped">
                 <thead>
@@ -133,6 +157,72 @@
             </table>
         </div>
 
+
+
+        <!-- STOPPED -->
+        <div class="col-sm-12">
+            <h3>Stopped</h3>
+            <hr>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Length</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Impressions</th>
+                        <th>Current Revenue</th>
+                        <th>Projected Revenue</th>
+                        <th>Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for campaign in stopped_campaigns %}
+                    <tr>
+                        <td>
+                            <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
+                        </td>
+                        <td>
+                            {{  campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ (campaign.end - campaign.start).days }} days
+                        </td>
+                        <td>
+                            {{ campaign.start.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.end.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
+                        </td>
+                        <td>
+                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
+                        </td>
+                        <td>
+                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                        </td>
+                        <td>
+                            <form class="form-stopped" action="" method="">
+                                <input type="hidden" id="stopped-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-stopped" aria-label="Edit">
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-success btn-sm btn-play-stopped" aria-label="Play">
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+
+
+        <!-- DRAFTS -->
         <div class="col-sm-12">
             <h3>Drafts:</h3>
             <hr>

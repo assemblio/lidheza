@@ -24,7 +24,7 @@ def fetch(ad_id):
     # FIXME: hardcoded test
     host = 'ferizajpress.com'
 
-    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host, ad_id)
+    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host)
 
     # If there are no on-going campaigns, return an empty ad block
     if campaign is None:

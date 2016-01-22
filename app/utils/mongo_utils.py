@@ -47,8 +47,12 @@ class MongoUtils(object):
         #TODO: date filter and status: published
         return self.find_campaigns({'publisher.id': publisher_id, 'status': 'published'})
 
+    def get_publisher_stopped_campaigns(self, publisher_id):
+        #TODO: date filter and status: stopped
+        return self.find_campaigns({'publisher.id': publisher_id, 'status': 'stopped'})
+
     def get_publisher_draft_campaigns(self, publisher_id):
-        #TODO: date filter and status: published
+        #TODO: date filter and status: draft
         return self.find_campaigns({'publisher.id': publisher_id, 'status': 'draft'})
 
     # CAMPAIGNS
@@ -67,6 +71,9 @@ class MongoUtils(object):
     def set_campaign_as_published(self, id):
         self.set_campaign_status(id, 'published')
 
+    def set_campaign_as_stopped(self, id):
+        self.set_campaign_status(id, 'stopped')
+
     def set_campaign_as_draft(self, id):
         self.set_campaign_status(id, 'draft')
 
@@ -82,7 +89,7 @@ class MongoUtils(object):
     def remove_asset_url(self, campaign_id, asset_id):
         self.mongo.db['campaigns'].update({'_id': ObjectId(campaign_id)}, { '$unset': { 'assets.%s' % asset_id: ""}})
 
-    def get_ongoing_campaign_asset_url_for_publisher(self, host, ad_id):
+    def get_ongoing_campaign_asset_url_for_publisher(self, host):
         # Get list of eligible ad campaigns to return
         cursor = self.mongo.db['campaigns'].find({
             'publisher.host': host,

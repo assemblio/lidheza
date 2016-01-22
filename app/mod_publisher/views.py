@@ -25,6 +25,7 @@ def index(pid):
     else:
         # Get the ongoing campaigns
         published_campaigns = mongo_utils.get_publisher_published_campaigns(pid)
+        stopped_campaigns = mongo_utils.get_publisher_stopped_campaigns(pid)
         draft_campaigns = mongo_utils.get_publisher_draft_campaigns(pid)
 
         # Render template
@@ -32,6 +33,7 @@ def index(pid):
                                publisher=publisher,
                                rateform=rateform,
                                published_campaigns=published_campaigns,
+                               stopped_campaigns=stopped_campaigns,
                                draft_campaigns=draft_campaigns)
 
 @mod_publisher.route('/<pid>/update/rate', methods=['POST'])
@@ -115,14 +117,14 @@ def campaign_edit(pid, campaign_id):
         form.impression_rate.data = campaign['impressions']['rate']
         form.impression_goal.data = campaign['impressions']['goal']
 
-        published = True if campaign['status'] == 'published' else False
+        published = True if campaign['status'] == 'published' or campaign['status'] == 'stopped' else False
 
         return render_template('mod_publisher/campaign/create.html', publisher=publisher, form=form, edit=True, published=published)
     else:
         form = CampaignForm(request.form)
 
-        if campaign['status'] == 'published':
-            # If the campaign is already published, we can only edit: name, url, end date, and impressions goals.
+        if campaign['status'] == 'published' or campaign['status'] == 'stopped':
+            # If the campaign is already published or has been published and is currently stopped, we can only edit: name, url, end date, and impressions goals.
             update = {
                 'name': form.campaign_name.data,
                 'url': form.url.data,
@@ -163,6 +165,11 @@ def campaign_save_as_draft(pid, campaign_id):
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/publish', methods=['POST'])
 def campaign_publish(pid, campaign_id):
     mongo_utils.set_campaign_as_published(campaign_id)
+    return redirect(url_for('publisher.index', pid=pid))
+
+@mod_publisher.route('/<pid>/campaign/<campaign_id>/stop', methods=['POST'])
+def campaign_stop(pid, campaign_id):
+    mongo_utils.set_campaign_as_stopped(campaign_id)
     return redirect(url_for('publisher.index', pid=pid))
 
 @mod_publisher.route('/<pid>/settings/ad-spaces', methods=['GET', 'POST'])
