@@ -19,10 +19,10 @@ def fetch(ad_id):
     # If it's from a website, then get the host as an identifier.
     # If it's from an mobile app, then get app id?
     # For now, we just need to worry about a website
-    host = utils.get_host(request.host_url)
+    #host = utils.get_host(request.host_url)
 
-    # Uncomment this when testing
-    #host = 'ferizajpress.com'
+    # Uncomment this when production ready
+    host = 'ferizajpress.com'
 
     campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host)
 

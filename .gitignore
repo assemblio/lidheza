@@ -1,6 +1,6 @@
 campaign-assets
 .idea
-app.swg
+app.wsgi
 config.cfg
 venv
 *.pyx
