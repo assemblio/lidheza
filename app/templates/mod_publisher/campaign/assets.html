@@ -127,21 +127,25 @@
                     init: function() {
 
                         // First we need to check if this ad type has a previously uploaded asset already (when we are in edit mode).
-                        var assetId = $($('#dz-ad-' + size + ' input')[0]).attr('value');
-                        var previously_uploaded_assets = {{ campaign.assets|tojson|safe }};
+                        // Only do this if the ad type is supported by the publisher
+                        if(!$('#dz-ad-' + size).hasClass('disable')){
 
-                        if(assetId in previously_uploaded_assets){
-                            var assetUrl = "{{ config['SERVER_HOST'] }}/" + previously_uploaded_assets[assetId];
+                            var assetId = $($('#dz-ad-' + size + ' input')[0]).attr('value');
+                            var previously_uploaded_assets = {{ campaign.assets|tojson|safe }};
 
-                            var mockFile = { name: assetId, size: 12345 };
+                            if(assetId in previously_uploaded_assets){
+                                var assetUrl = "{{ config['SERVER_HOST'] }}/" + previously_uploaded_assets[assetId];
 
-                            this.options.addedfile.call(this, mockFile);
-                            this.options.thumbnail.call(this, mockFile, assetUrl);
-                            this.files.push(mockFile);
+                                var mockFile = { name: assetId, size: 12345 };
 
-                            // Remove lingering progress bar.
-                            $($('#dz-ad-' + size + ' .dz-preview')[0]).addClass('dz-complete');
+                                this.options.addedfile.call(this, mockFile);
+                                this.options.thumbnail.call(this, mockFile, assetUrl);
+                                this.files.push(mockFile);
 
+                                // Remove lingering progress bar.
+                                $($('#dz-ad-' + size + ' .dz-preview')[0]).addClass('dz-complete');
+
+                            }
                         }
 
                         // Event: When a file is added to the list.
