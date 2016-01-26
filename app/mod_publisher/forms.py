@@ -1,11 +1,11 @@
-from wtforms import Form, IntegerField, DecimalField, StringField, DateField, HiddenField, SelectMultipleField, validators, widgets
+from wtforms import Form, IntegerField, FloatField, StringField, DateField, HiddenField, SelectMultipleField, validators, widgets
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 class ImpressionRateForm(Form):
-    rate = DecimalField('Default Rate', [validators.Required()])
+    rate = FloatField('Default Rate', [validators.Required()])
 
 class CampaignForm(Form):
     id = HiddenField('ID')
@@ -13,7 +13,7 @@ class CampaignForm(Form):
     url = StringField('URL', [validators.Required()])
     start_date = DateField('Start Date', [validators.Required()], format='%d/%m/%Y')
     end_date = DateField('End Date', [validators.Required()], format='%d/%m/%Y')
-    impression_rate = DecimalField('Impression Rate', [validators.Required()])
+    impression_rate = FloatField('Impression Rate', [validators.Required()])
     impression_goal = IntegerField('Impression Goal', [validators.Required()], default=10000)
 
 class AssetForm(Form):
