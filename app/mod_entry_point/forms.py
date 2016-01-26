@@ -40,8 +40,8 @@ class AdvertiserForm(Form):
 
 
 class PublisherForm(Form):
-    name = StringField('Name', [validators.Required()])
-    website = StringField('Website', [validators.Required()])
+    name = StringField('Publisher Name (e.g. Website Name)', [validators.Required()])
+    website = StringField('Website URL', [validators.Required()])
     description = TextAreaField('Description')
 
     registration_number = StringField('Business Registration Number', [validators.Required()])
@@ -74,7 +74,6 @@ class PublisherForm(Form):
     country = StringField('Country')
 
     # Social Media
-    website = StringField('Website')
     facebook = StringField('Facebook')
     twitter = StringField('Twitter')
     linked_in = StringField('LinkedIn')

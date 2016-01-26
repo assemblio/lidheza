@@ -1,9 +1,27 @@
 {% extends "layout.html" %}
 
+{% block script %}
+    <script>
+    $(function() {
+        $( ".btn-cancel" ).click(function() {
+            $('.form-register').attr('method', 'GET');
+            $('.form-register').attr('action', "{{ url_for('entrypoint.index') }}");
+            $('.form-register').submit();
+        });
+
+        $( ".btn-register" ).click(function() {
+            $('.form-register').attr('method', 'POST');
+            $('.form-register').attr('action', "{{ url_for('entrypoint.publisher') }}");
+            $('.form-register').submit();
+        });
+    });
+    </script>
+{% endblock %}
+
 {% block rows %}
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
-            <form action="{{ url_for('entrypoint.publisher') }}" method="POST">
+            <form class="form-register" action="" method="">
 
                 <div class="form-group">
                     {{ form.name.label }}
@@ -46,10 +64,11 @@
                 </div>
 
                 <div class="pull-right">
-                    <input type="button" class="btn btn-danger" value="Cancel"/>
-                    <input type="submit" class="btn btn-primary" value="Register"/>
+                    <input type="button" class="btn btn-danger btn-cancel" value="Cancel"/>
+                    <input type="button" class="btn btn-primary btn-register" value="Register"/>
                 </div>
             </form>
         </div>
     </div>
-{% endblock rows %}
+    <br>
+{% endblock %}
