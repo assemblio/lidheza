@@ -25,6 +25,15 @@
 
             });
 
+            $( ".btn-delete-draft" ).click(function() {
+                var campaign_id = $(this).parent().find('input[id=draft-campaign-id]').val();
+                var action = '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+
+                $('.form-published').attr('method', 'POST');
+                $('.form-published').attr('action', action);
+                $('.form-published').submit();
+            });
+
             $( ".btn-stop-published" ).click(function() {
                 var campaign_id = $(this).parent().find('input[id=published-campaign-id]').val();
                 var action = '{{ url_for('publisher.campaign_stop', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
@@ -282,6 +291,9 @@
                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                 </button>
                                 {% endif %}
+                                <button type="button" class="btn btn-danger btn-primary btn-sm btn-delete-draft" aria-label="Delete">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
                             </form>
                         </td>
                     </tr>
