@@ -82,7 +82,7 @@ def campaign_create(pid):
                     'goal': int(form.impression_goal.data),
                     'count': 0
                 },
-                'assets': []
+                'assets': {}
             }
 
             campaign_id = mongo_utils.insert_one_campaign(campaign)
