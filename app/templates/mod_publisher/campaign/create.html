@@ -14,7 +14,27 @@
 
 {% block script %}
     <script>
-    $( document ).ready(function() {
+    $(function() {
+        $( ".btn-cancel" ).click(function() {
+            $('.form-campaign').attr('method', 'GET');
+            $('.form-campaign').attr('action', "{{ url_for('publisher.index', pid=publisher._id) }}");
+            $('.form-campaign').submit();
+        });
+
+        {% if edit %}
+        $( ".btn-edit" ).click(function() {
+            $('.form-campaign').attr('method', 'POST');
+            $('.form-campaign').attr('action', "{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id=form.id.data) }}");
+            $('.form-campaign').submit();
+        });
+        {% else %}
+        $( ".btn-create" ).click(function() {
+            $('.form-campaign').attr('method', 'POST');
+            $('.form-campaign').attr('action', "{{ url_for('publisher.campaign_create', pid=publisher._id ) }}");
+            $('.form-campaign').submit();
+        });
+        {% endif %}
+
         $('#start_date').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true
@@ -45,12 +65,7 @@
 {% block rows %}
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
-            {% if edit %}
-            <form class="form-horizontal" action="{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id=form.id.data) }}" method="POST">
-            {% else %}
-            <form class="form-horizontal" action="{{ url_for('publisher.campaign_create', pid=publisher._id ) }}" method="POST">
-            {% endif %}
-
+            <form class="form-horizontal form-campaign" action="" method="">
                 <div class="form-group {{"has-error" if form.campaign_name.errors }}">
                     {{ form.campaign_name.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">
@@ -118,11 +133,11 @@
                 <div class="form-group">
                     <div class="col-sm-12">
                         <div class="pull-right">
-                            <input type="button" class="btn btn-warning" value="Cancel">
+                            <input type="button" class="btn btn-warning btn-cancel" value="Cancel">
                             {% if edit %}
-                                <input type="submit" class="btn btn-primary btn-edit" value="Update">
+                                <input type="button" class="btn btn-primary btn-edit" value="Update">
                             {% else %}
-                                <input type="submit" class="btn btn-primary btn-create" value="Create">
+                                <input type="button" class="btn btn-primary btn-create" value="Create">
                             {% endif %}
                         </div>
                     </div>
