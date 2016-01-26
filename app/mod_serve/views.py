@@ -9,7 +9,7 @@ def fetch(ad_id):
     Process:
         1) Check where the request is coming from (a host, e.g. example.com).
         2) Get ongoing ad campaigns associated with the author of the request
-        3) If there are no ongoing ad campaings, return an empty ad div.
+        3) If there are no ongoing ad campaigns, return an empty ad div.
         4) If there are ongoing ad campaigns, return an ad dive with add asset and the target URL.
     :param ad_id:
     :return:
@@ -19,12 +19,9 @@ def fetch(ad_id):
     # If it's from a website, then get the host as an identifier.
     # If it's from an mobile app, then get app id?
     # For now, we just need to worry about a website
-    #host = utils.get_host(request.host_url)
+    host_origin = utils.get_host(request.environ['HTTP_ORIGIN'])
 
-    # Uncomment this when production ready
-    host = 'ferizajpress.com'
-
-    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host)
+    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host_origin)
 
     # If there are no on-going campaigns, return an empty ad block
     if campaign is None:
