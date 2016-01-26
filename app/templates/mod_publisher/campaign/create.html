@@ -26,15 +26,18 @@
         });
 
         $( "#impression_goal" ).keyup(function() {
-            $( "#cost_to_advertiser" ).val( $(this).val() * $( "#impression_rate").val());
+            $( "#gross_revenue" ).val( $(this).val() * $( "#impression_rate").val());
+            $( "#net_revenue" ).val( $( "#gross_revenue" ).val() * ($( "#gross_revenue" ).val() - parseFloat("{{ config['COMMISSION'] }}")));
         });
 
         $( "#impression_rate" ).keyup(function() {
-            $( "#cost_to_advertiser" ).val( $(this).val() * $( "#impression_goal").val());
+            $( "#gross_revenue" ).val( $(this).val() * $( "#impression_goal").val());
+            $( "#net_revenue" ).val( $( "#gross_revenue" ).val() - ($( "#gross_revenue" ).val() * parseFloat("{{ config['COMMISSION'] }}")));
         });
 
-        // Init cost to advertiser
-        $( "#cost_to_advertiser" ).val( $( "#impression_rate").val() * $( "#impression_goal").val());
+        // Init projected
+        $( "#gross_revenue" ).val( $( "#impression_rate").val() * $( "#impression_goal").val());
+        $( "#net_revenue" ).val( $( "#gross_revenue" ).val() - ($( "#gross_revenue" ).val() * parseFloat("{{ config['COMMISSION'] }}")));
     });
     </script>
 {% endblock %}
@@ -81,9 +84,16 @@
                 </div>
 
                 <div class="form-group">
-                     <label class="control-label col-sm-4" for="cost_to_advertiser">Cost to Advertiser</label>
+                     <label class="control-label col-sm-4" for="gross_revenue">Projected Gross Revenue</label>
                      <div class="col-sm-8">
-                         <input class="form-control disable" id="cost_to_advertiser" name="cost_to_advertiser" type="text" value="">
+                         <input class="form-control disable" id="gross_revenue" name="gross_revenue" type="text" value="">
+                     </div>
+                </div>
+
+                <div class="form-group">
+                     <label class="control-label col-sm-4" for="net_revenue">Projected Net Revenue</label>
+                     <div class="col-sm-8">
+                         <input class="form-control disable" id="net_revenue" name="net_revenue" type="text" value="">
                      </div>
                 </div>
 

@@ -119,7 +119,7 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Current Revenue</th>
-                        <th>Projected Revenue</th>
+                        <th>Revenue Goal</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
@@ -145,10 +145,10 @@
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-published" action="" method="">
@@ -184,7 +184,7 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Current Revenue</th>
-                        <th>Projected Revenue</th>
+                        <th>Revenue Goal</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
@@ -210,10 +210,10 @@
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-stopped" action="" method="">
@@ -249,7 +249,7 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Current Revenue</th>
-                        <th>Projected Revenue</th>
+                        <th>Revenue Goal</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
@@ -275,10 +275,10 @@
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-draft" action="" method="">
