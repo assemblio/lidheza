@@ -21,8 +21,8 @@ def fetch(ad_id):
     # For now, we just need to worry about a website
     host = utils.get_host(request.host_url)
 
-    # FIXME: hardcoded test
-    host = 'ferizajpress.com'
+    # Uncomment this when testing
+    #host = 'ferizajpress.com'
 
     campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host)
 
