@@ -5,28 +5,28 @@
         $(function() {
 
             $( ".btn-edit-stopped" ).click(function() {
-                editCampaign('.form-stopped', 'stopped-campaign-id');
+                editCampaign(this, '.form-stopped', 'stopped-campaign-id');
             });
 
             $( ".btn-edit-published" ).click(function() {
-                editCampaign('.form-published', 'published-campaign-id');
+                editCampaign(this, '.form-published', 'published-campaign-id');
             });
 
             $( ".btn-edit-draft" ).click(function() {
-                editCampaign('.form-draft', 'draft-campaign-id');
+                editCampaign(this, '.form-draft', 'draft-campaign-id');
             });
 
             $( ".btn-play-draft" ).click(function() {
-                publishCampaign('.form-draft', 'draft-campaign-id');
+                publishCampaign(this, '.form-draft', 'draft-campaign-id');
             });
 
             $( ".btn-play-stopped" ).click(function() {
-                publishCampaign('.form-stopped', 'stopped-campaign-id');
+                publishCampaign(this, '.form-stopped', 'stopped-campaign-id');
 
             });
 
             $( ".btn-stop-published" ).click(function() {
-                var campaign_id = $('.form-published input[id=published-campaign-id]').val();
+                var campaign_id = $(this).parent().find('input[id=published-campaign-id]').val();
                 var action = '{{ url_for('publisher.campaign_stop', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $('.form-published').attr('method', 'POST');
@@ -34,8 +34,8 @@
                 $('.form-published').submit();
             });
 
-            function publishCampaign(formClass, campaignIDFormElementInputId){
-                var campaign_id = $(formClass + ' input[id=' + campaignIDFormElementInputId + ']').val();
+            function publishCampaign(sourceElem, formClass, campaignIDFormElementInputId){
+                var campaign_id = $(sourceElem).parent().find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $(formClass).attr('method', 'POST');
@@ -43,8 +43,8 @@
                 $(formClass).submit();
             }
 
-            function editCampaign(formClass, campaignIDFormElementInputId){
-                var campaign_id = $(formClass + ' input[id=' + campaignIDFormElementInputId + ']').val();
+            function editCampaign(sourceElem, formClass, campaignIDFormElementInputId){
+                var campaign_id = $(sourceElem).parent().find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $(formClass).attr('method', 'GET');
