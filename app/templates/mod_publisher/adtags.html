@@ -28,7 +28,7 @@ window.onload = function () {
 <code class="language-markup">
 &lt;div&gt;
   &lt;script&gt;
-    var a=new XMLHttpRequest;a.open("GET","http://lidheza.com/fetch/{{ available_ad_space['id'] }}",!1),a.send(null),
+    var a=new XMLHttpRequest;a.open("GET","{{ config['SERVER_HOST'] }}/fetch/{{ available_ad_space['id'] }}",!1),a.send(null),
     document.write(a.responseText);
   &lt;/script&gt;
 &lt;/div&gt;

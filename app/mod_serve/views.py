@@ -21,7 +21,7 @@ def fetch(ad_id):
     # For now, we just need to worry about a website
     host_origin = utils.get_host(request.environ['HTTP_ORIGIN'])
 
-    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host_origin)
+    campaign = mongo_utils.get_ongoing_campaign_asset_url_for_publisher(host_origin, True)
 
     # If there are no on-going campaigns, return an empty ad block
     if campaign is None:
@@ -52,10 +52,33 @@ def fetch(ad_id):
 
             ad = '''
                 <div id="ldz" align="center">
-                    <a id="ldz-click" href="%s" target="_self">
-                    <img id="ldz-img" src="%s"/>
-                    </a></div>
+                    <script>
+                        function ldz(){
+                            var a=new XMLHttpRequest;
+                            a.onreadystatechange = function(){
+                                if (a.readyState == 4 && a.status == 200){
+                                    location.href="%s";
+                                }
+                            };
+                            a.open("GET","%s/click/%s/%s",!1),a.send(null);
+                        }
+                    </script>
+                    <a id="ldz-click" href="#" target="_self" onClick="ldz()">
+                        <img id="ldz-img" src="%s"/>
+                    </a>
                 </div>
-                ''' % (ad_url, ad_asset_url)
+                ''' % (ad_url, current_app.config['SERVER_HOST'], campaign['_id'], ad_id, ad_asset_url)
 
             return Response(ad, mimetype='text/xml')
+
+@mod_serve.route('/click/<campaign_id>/<ad_id>', methods=['GET'])
+def click(campaign_id, ad_id):
+    '''
+    This is just to log a click on the ad so that we can, through a cron job,
+    collect the number of times an ad has been clicked for a specific ad size
+    from a specific ad campaign.
+    :param campaign_id:
+    :param ad_id
+    :return:
+    '''
+    return ('', 200)

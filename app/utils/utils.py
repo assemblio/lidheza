@@ -55,7 +55,10 @@ class Utils(object):
 
     def get_host(self, url):
         parsed_website = urlparse(url)
-        host = parsed_website.netloc
+
+        # we want test paths to work (e.g. localhost:8000) as well as URLs without http://
+        # so plan for eventuality to use path property instead of netloc.
+        host = parsed_website.path if parsed_website.netloc == '' else parsed_website.netloc
 
         # If host is something like: xxx.foo.bar then we just want foo.bar
         if len(host.split('.')) == 3:

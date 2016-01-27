@@ -30,7 +30,7 @@ def create_app():
     init_modules(app)
 
     # Allow cross-domain access .
-    cors = CORS(app, resources={r"/fetch/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"/[fetch|click]/*": {"origins": "*"}})
 
     # Initialize the app to work with MongoDB
     mongo.init_app(app, config_prefix='MONGO')

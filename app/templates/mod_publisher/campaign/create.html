@@ -47,7 +47,7 @@
 
         $( "#impression_goal" ).keyup(function() {
             $( "#gross_revenue" ).val( $(this).val() * $( "#impression_rate").val());
-            $( "#net_revenue" ).val( $( "#gross_revenue" ).val() * ($( "#gross_revenue" ).val() - parseFloat("{{ config['COMMISSION'] }}")));
+            $( "#net_revenue" ).val( $( "#gross_revenue" ).val() - ($( "#gross_revenue" ).val() * parseFloat("{{ config['COMMISSION'] }}")));
         });
 
         $( "#impression_rate" ).keyup(function() {
