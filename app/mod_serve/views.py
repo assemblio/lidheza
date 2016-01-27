@@ -60,19 +60,19 @@ def fetch(ad_id):
                                     location.href="%s";
                                 }
                             };
-                            a.open("GET","%s/click/%s/%s",!1),a.send(null);
+                            a.open("GET","%s/click/publisher/%s/campaign/%s/%s",!1),a.send(null);
                         }
                     </script>
                     <a id="ldz-click" href="#" target="_self" onClick="ldz()">
                         <img id="ldz-img" src="%s"/>
                     </a>
                 </div>
-                ''' % (ad_url, current_app.config['SERVER_HOST'], campaign['_id'], ad_id, ad_asset_url)
+                ''' % (ad_url, current_app.config['SERVER_HOST'], publisher_id, campaign['_id'], ad_id, ad_asset_url)
 
             return Response(ad, mimetype='text/xml')
 
-@mod_serve.route('/click/<campaign_id>/<ad_id>', methods=['GET'])
-def click(campaign_id, ad_id):
+@mod_serve.route('/click/publisher/<publisher_id>/campaign/<campaign_id>/<ad_id>', methods=['GET'])
+def click(publisher_id, campaign_id, ad_id):
     '''
     This is just to log a click on the ad so that we can, through a cron job,
     collect the number of times an ad has been clicked for a specific ad size
