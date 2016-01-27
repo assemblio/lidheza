@@ -113,11 +113,11 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Rate</th>
                         <th>Length</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Impressions</th>
+                        <th>Rate</th>
                         <th>Current Revenue</th>
                         <th>Revenue Goal</th>
                         <th>Operations</th>
@@ -130,9 +130,6 @@
                             <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
                         </td>
                         <td>
-                            {{  campaign.impressions.rate }}
-                        </td>
-                        <td>
                             {{ (campaign.end - campaign.start).days }} days
                         </td>
                         <td>
@@ -143,6 +140,9 @@
                         </td>
                         <td>
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
+                        </td>
+                        <td>
+                            {{  campaign.impressions.rate }}
                         </td>
                         <td>
                             {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
@@ -178,11 +178,11 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Rate</th>
                         <th>Length</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Impressions</th>
+                        <th>Rate</th>
                         <th>Current Revenue</th>
                         <th>Revenue Goal</th>
                         <th>Operations</th>
@@ -195,9 +195,6 @@
                             <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
                         </td>
                         <td>
-                            {{  campaign.impressions.rate }}
-                        </td>
-                        <td>
                             {{ (campaign.end - campaign.start).days }} days
                         </td>
                         <td>
@@ -208,6 +205,9 @@
                         </td>
                         <td>
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.rate }}
                         </td>
                         <td>
                             {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
@@ -243,11 +243,11 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Rate</th>
                         <th>Length</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Impressions</th>
+                        <th>Rate</th>
                         <th>Current Revenue</th>
                         <th>Revenue Goal</th>
                         <th>Operations</th>
@@ -260,9 +260,6 @@
                             <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
                         </td>
                         <td>
-                            {{  campaign.impressions.rate }}
-                        </td>
-                        <td>
                             {{ (campaign.end - campaign.start).days }} days
                         </td>
                         <td>
@@ -273,6 +270,9 @@
                         </td>
                         <td>
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
+                        </td>
+                        <td>
+                            {{  campaign.impressions.rate }}
                         </td>
                         <td>
                             {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
