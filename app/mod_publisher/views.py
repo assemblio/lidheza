@@ -80,7 +80,7 @@ def campaign_create(pid):
                 'impressions': {
                     'rate': float(form.impression_rate.data),
                     'goal': int(form.impression_goal.data),
-                    'count': 0
+                    'count': 1
                 },
                 'assets': {}
             }

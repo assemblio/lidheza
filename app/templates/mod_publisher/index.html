@@ -178,7 +178,7 @@
                             {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
                         </td>
                         <td>
-                            {{  campaign.impressions.rate }}
+                            {{ campaign.impressions.rate }}
                         </td>
                         <td>
                             {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}

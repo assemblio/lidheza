@@ -108,9 +108,11 @@ def init_modules(app):
     # Import blueprint modules
     from app.mod_entry_point.views import mod_entry_point
     from app.mod_publisher.views import mod_publisher
+    from app.mod_advertiser.views import mod_advertiser
     from app.mod_serve.views import mod_serve
 
 
     app.register_blueprint(mod_entry_point)
     app.register_blueprint(mod_publisher)
+    app.register_blueprint(mod_advertiser)
     app.register_blueprint(mod_serve)
