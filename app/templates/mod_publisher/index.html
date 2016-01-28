@@ -3,25 +3,24 @@
 {% block script %}
     <script>
         $(function() {
-
             $( ".btn-edit-stopped" ).click(function() {
-                editCampaign(this, '.form-stopped', 'stopped-campaign-id');
+                editCampaign('.form-stopped', 'stopped-campaign-id');
             });
 
             $( ".btn-edit-published" ).click(function() {
-                editCampaign(this, '.form-published', 'published-campaign-id');
+                editCampaign('.form-published', 'published-campaign-id');
             });
 
             $( ".btn-edit-draft" ).click(function() {
-                editCampaign(this, '.form-draft', 'draft-campaign-id');
+                editCampaign('.form-draft', 'draft-campaign-id');
             });
 
             $( ".btn-play-draft" ).click(function() {
-                publishCampaign(this, '.form-draft', 'draft-campaign-id');
+                publishCampaign('.form-draft', 'draft-campaign-id');
             });
 
             $( ".btn-play-stopped" ).click(function() {
-                publishCampaign(this, '.form-stopped', 'stopped-campaign-id');
+                publishCampaign('.form-stopped', 'stopped-campaign-id');
 
             });
 
@@ -43,8 +42,8 @@
                 $('.form-published').submit();
             });
 
-            function publishCampaign(sourceElem, formClass, campaignIDFormElementInputId){
-                var campaign_id = $(sourceElem).parent().find('input[id=' + campaignIDFormElementInputId + ']').val();
+            function publishCampaign(formClass, campaignIDFormElementInputId){
+                var campaign_id = $(formClass).find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $(formClass).attr('method', 'POST');
@@ -52,14 +51,51 @@
                 $(formClass).submit();
             }
 
-            function editCampaign(sourceElem, formClass, campaignIDFormElementInputId){
-                var campaign_id = $(sourceElem).parent().find('input[id=' + campaignIDFormElementInputId + ']').val();
+            function editCampaign(formClass, campaignIDFormElementInputId){
+                var campaign_id = $(formClass).find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $(formClass).attr('method', 'GET');
                 $(formClass).attr('action', action);
                 $(formClass).submit();
             }
+
+            // Listener - Triggered when the share button is clicked/shown
+            // so that we can ste the campaign id in a hidden field and it
+            // can be accessed when submitting the modal.
+            $('.campaign-share-modal').on('show.bs.modal', function (event) {
+                var triggerButton = $(event.relatedTarget);
+                var campaignId = triggerButton.data('campaign-id');
+
+                var modal = $(this);
+                modal.find('.modal-body input[id=share-campaign-id]').val(campaignId);
+            });
+
+            $( ".btn-share-campaign" ).click(function() {
+                var campaign_id = $('#share-campaign-id').val();
+
+                // Construct the message.
+                var message = "Hello!" +
+                    "\n\nCheck out how your ad campaign in '{{ publisher.name }}' is doing:" +
+                    "\n{{ config['SERVER_HOST'] }}/admin/advertiser/campaign/" + campaign_id +
+                    "\n\nCheers," +
+                    "\n\nThe Lidheza Team";
+
+                // Send the share e-mail.
+                $.ajax({
+                    url: "//formspree.io/" + $('#share-email').val(),
+                    method: "POST",
+                    data: {
+                        "message": message,
+                        "subject": "Your Advertisement Stats with {{ publisher.name }}",
+                        "replyto": "lidheza@assemblio.com"
+                    },
+                    dataType: "json"
+                }).done(function() {
+                    // Close the modal.
+                    $('.campaign-share-modal').modal('hide')
+                });
+            });
         });
 
     </script>
@@ -153,6 +189,9 @@
                         <td>
                             <form class="form-published" action="" method="">
                                 <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-published" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+                                </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-published" aria-label="Edit">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
@@ -218,6 +257,9 @@
                         <td>
                             <form class="form-stopped" action="" method="">
                                 <input type="hidden" id="stopped-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-stopped" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+                                </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-stopped" aria-label="Edit">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
@@ -302,5 +344,27 @@
             </table>
         </div>
         {% endif %}
+    </div>
+
+
+    <!-- Small modal -->
+    <div class="modal fade campaign-share-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="hidden" id="share-campaign-id"/>
+                            <label for="share-email">Share statistics:</label>
+                            <input type="text" class="form-control" id="share-email" name="share-email" placeholder="E-mail"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Cancel">Cancel</button>
+                    <button type="button" class="btn btn-default btn-sm btn-share-campaign" aria-label="Share">Share</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
