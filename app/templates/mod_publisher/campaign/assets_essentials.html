@@ -131,8 +131,10 @@
         <div class="col-sm-12 text-center">
             <form class="form-submit" action="" method="POST">
                 <input type="submit" class="btn btn-danger btn-delete" value="Cancel and Delete">
+                {% if publisher.status == 'draft' %}
                 <input type="submit" class="btn btn-warning btn-draft" value="Save as Draft">
-                <input type="submit" class="btn btn-primary btn-publish" value="Publish">
+                {% endif %}
+                <input type="submit" class="btn btn-primary btn-publish" value="{{ 'Publish' if publisher.status == 'draft' else 'Save' }}">
             </form>
         </div>
     </div>

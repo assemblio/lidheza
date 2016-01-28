@@ -4,23 +4,23 @@
     <script>
         $(function() {
             $( ".btn-edit-stopped" ).click(function() {
-                editCampaign('.form-stopped', 'stopped-campaign-id');
+                editCampaign(this, 'stopped-campaign-id');
             });
 
             $( ".btn-edit-published" ).click(function() {
-                editCampaign('.form-published', 'published-campaign-id');
+                editCampaign(this, 'published-campaign-id');
             });
 
             $( ".btn-edit-draft" ).click(function() {
-                editCampaign('.form-draft', 'draft-campaign-id');
+                editCampaign(this, 'draft-campaign-id');
             });
 
             $( ".btn-play-draft" ).click(function() {
-                publishCampaign('.form-draft', 'draft-campaign-id');
+                publishCampaign(this, 'draft-campaign-id');
             });
 
             $( ".btn-play-stopped" ).click(function() {
-                publishCampaign('.form-stopped', 'stopped-campaign-id');
+                publishCampaign(this, 'stopped-campaign-id');
 
             });
 
@@ -42,22 +42,24 @@
                 $('.form-published').submit();
             });
 
-            function publishCampaign(formClass, campaignIDFormElementInputId){
-                var campaign_id = $(formClass).find('input[id=' + campaignIDFormElementInputId + ']').val();
+            function publishCampaign(source, campaignIDFormElementInputId){
+                var form = $(source).parent();
+                var campaign_id = form.find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_publish', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
-                $(formClass).attr('method', 'POST');
-                $(formClass).attr('action', action);
-                $(formClass).submit();
+                form.attr('method', 'POST');
+                form.attr('action', action);
+                form.submit();
             }
 
-            function editCampaign(formClass, campaignIDFormElementInputId){
-                var campaign_id = $(formClass).find('input[id=' + campaignIDFormElementInputId + ']').val();
+            function editCampaign(source, campaignIDFormElementInputId){
+                var form = $(source).parent();
+                var campaign_id = form.find('input[id=' + campaignIDFormElementInputId + ']').val();
                 var action = '{{ url_for('publisher.campaign_edit', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
-                $(formClass).attr('method', 'GET');
-                $(formClass).attr('action', action);
-                $(formClass).submit();
+                form.attr('method', 'GET');
+                form.attr('action', action);
+                form.submit();
             }
 
             // Listener - Triggered when the share button is clicked/shown
