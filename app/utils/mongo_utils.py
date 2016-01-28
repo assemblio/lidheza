@@ -46,6 +46,17 @@ class MongoUtils(object):
             {'$set': {'adSpaces': ad_spaces}
         })
 
+    def get_publisher_finished_campaigns(self, publisher_id):
+        return self.find_campaigns({
+            'publisher.id': publisher_id,
+            '$or':[
+                {'$where': 'this.impressions.count >= this.impressions.goal'},
+                {'end': {
+                    '$lt': datetime.now()
+                }}
+            ]
+        })
+
     def get_publisher_published_campaigns(self, publisher_id):
         return self.find_campaigns({
             'publisher.id': publisher_id,
@@ -55,13 +66,14 @@ class MongoUtils(object):
             },
             'end': {
                 '$gte': datetime.now()
-            }
+            },
+            '$where': 'this.impressions.count < this.impressions.goal'
         })
 
-    def get_publisher_stopped_campaigns(self, publisher_id):
+    def get_publisher_paused_campaigns(self, publisher_id):
         return self.find_campaigns({
             'publisher.id': publisher_id,
-            'status': 'stopped',
+            'status': 'paused',
             'start': {
                 '$lte': datetime.now()
             },
@@ -92,11 +104,17 @@ class MongoUtils(object):
     def set_campaign_as_published(self, id):
         self.set_campaign_status(id, 'published')
 
-    def set_campaign_as_stopped(self, id):
-        self.set_campaign_status(id, 'stopped')
+    def set_campaign_as_paused(self, id):
+        self.set_campaign_status(id, 'paused')
 
     def set_campaign_as_draft(self, id):
         self.set_campaign_status(id, 'draft')
+
+    def set_campaign_as_expired(self, id):
+        self.set_campaign_status(id, 'expired')
+
+    def set_campaign_as_completed(self, id):
+        self.set_campaign_status(id, 'completed')
 
     def set_campaign_status(self, id, status):
         self.mongo.db['campaigns'].update({'_id': ObjectId(id)}, {'$set': {'status': status}})

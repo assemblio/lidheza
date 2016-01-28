@@ -27,10 +27,10 @@
                             <strong>Status</strong>
                         </td>
                         <td>
-                            {% if campaign.impressions.count >= campaign.impressions.goal %}
-                                <span class="label label-primary">completed</span>
-                            {% elif today > campaign.end %}
+                            {% if today > campaign.end %}
                                 <span class="label label-danger">expired</span>
+                            {% elif campaign.impressions.count >= campaign.impressions.goal %}
+                                <span class="label label-primary">completed</span>
                             {% else  %}
                                 <span class="label label-success">{{ campaign.status }}</span>
                             {% endif  %}
@@ -69,25 +69,26 @@
                             {{ campaign.impressions.rate }}
                         </td>
                     </tr>
-                    <!-- Amount due when campaign completed: impression goals reached -->
-                    {% if campaign.impressions.count >= campaign.impressions.goal %}
-                    <tr>
-                        <td>
-                            <strong style="color:red;">Amount Due</strong>
-                        </td>
-                        <td>
-                            <strong style="color:red;">{{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}</strong>
-                        </td>
-                    </tr>
 
                     <!-- Amount due when campaign expired: impression goals not reached but passed the expiration date -->
-                    {% elif today > campaign.end %}
+                    {% if today > campaign.end %}
                     <tr>
                         <td>
                             <strong style="color:red;">Amount Due</strong>
                         </td>
                         <td>
                             <strong style="color:red;">{{ (campaign.impressions.count * campaign.impressions.rate)|to_currency }}</strong>
+                        </td>
+                    </tr>
+
+                    <!-- Amount due when campaign completed: impression goals reached -->
+                    {% elif campaign.impressions.count >= campaign.impressions.goal %}
+                    <tr>
+                        <td>
+                            <strong style="color:red;">Amount Due</strong>
+                        </td>
+                        <td>
+                            <strong style="color:red;">{{ (campaign.impressions.goal * campaign.impressions.rate)|to_currency }}</strong>
                         </td>
                     </tr>
 

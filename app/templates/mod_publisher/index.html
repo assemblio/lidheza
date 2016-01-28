@@ -35,7 +35,7 @@
 
             $( ".btn-stop-published" ).click(function() {
                 var campaign_id = $(this).parent().find('input[id=published-campaign-id]').val();
-                var action = '{{ url_for('publisher.campaign_stop', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+                var action = '{{ url_for('publisher.campaign_pause', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
 
                 $('.form-published').attr('method', 'POST');
                 $('.form-published').attr('action', action);
@@ -102,34 +102,11 @@
 {% endblock %}
 
 {% block rows %}
+
     <div class="row">
         <div class="col-sm-12">
             <h2>{{ publisher.name }}</h2>
             <h4>Your default rate is <span class="label label-primary">{{ publisher.impressionRate }} EUR</span> per impression (<a href="" data-toggle="modal" data-target="#myModal">edit</a>).</h4>
-
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Impression Rate</h4>
-                  </div>
-                    <form action="{{ url_for('publisher.update_impression_rate', pid=publisher._id) }}" method="POST">
-                      <div class="modal-body">
-                          <div class="form-group">
-                              {{ rateform.rate.label }}
-                              {{ rateform.rate(class="form-control") }}
-                          </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                      </div>
-                    </form>
-                </div>
-              </div>
-            </div>
             <hr>
         </div>
 
@@ -138,6 +115,75 @@
                 <input type="submit" class="btn btn-success btn-campaign" value="New Campaign">
             </form>
         </div>
+
+
+        <!-- FINISHED -->
+        {% if finished_campaigns|length > 0 %}
+        <div class="col-sm-12">
+            <h3>Finished</h3>
+            <hr>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Outcome</th>
+                        <th>Length</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Impressions</th>
+                        <th>Rate</th>
+                        <th>Revenue Goal</th>
+                        <th>Final Revenue</th>
+                        <th>Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for campaign in finished_campaigns %}
+                    <tr>
+                        <td>
+                            <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
+                        </td>
+                        <td>
+                            <span class="label label-{{ 'success' if campaign.impressions.count >= campaign.impressions.goal else 'danger' }}">{{ 'completed' if campaign.impressions.count >= campaign.impressions.goal else 'expired  ' }}</span>
+                        </td>
+                        <td>
+                            {{ (campaign.end - campaign.start).days }} days
+                        </td>
+                        <td>
+                            {{ campaign.start.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.end.strftime('%d-%b-%Y') }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.count|thousands_seperator }} / {{ campaign.impressions.goal|thousands_seperator }}
+                        </td>
+                        <td>
+                            {{ campaign.impressions.rate }}
+                        </td>
+                        <td>
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                        </td>
+                        <td>
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                        </td>
+                        <td>
+                            <form class="form-published" action="" method="">
+                                <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
+                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-completed" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-success btn-sm btn-archive" aria-label="Archive">
+                                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
 
 
         <!-- PUBLISHED -->
@@ -154,8 +200,8 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Rate</th>
-                        <th>Current Revenue</th>
                         <th>Revenue Goal</th>
+                        <th>Current Revenue</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
@@ -181,10 +227,10 @@
                             {{ campaign.impressions.rate }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-published" action="" method="">
@@ -196,7 +242,7 @@
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-danger btn-sm btn-stop-published" aria-label="Stop">
-                                    <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                                 </button>
                             </form>
                         </td>
@@ -208,10 +254,10 @@
         {% endif %}
 
 
-        <!-- STOPPED -->
-        {% if stopped_campaigns|length > 0 %}
+        <!-- PAUSED -->
+        {% if paused_campaigns|length > 0 %}
         <div class="col-sm-12">
-            <h3>Stopped</h3>
+            <h3>Paused</h3>
             <hr>
             <table class="table table-striped">
                 <thead>
@@ -222,13 +268,13 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Rate</th>
-                        <th>Current Revenue</th>
                         <th>Revenue Goal</th>
+                        <th>Current Revenue</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for campaign in stopped_campaigns %}
+                {% for campaign in paused_campaigns %}
                     <tr>
                         <td>
                             <a href="{{ campaign.url }}" target="_blank">{{ campaign.name }}</a>
@@ -249,10 +295,10 @@
                             {{ campaign.impressions.rate }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-stopped" action="" method="">
@@ -290,8 +336,8 @@
                         <th>End Date</th>
                         <th>Impressions</th>
                         <th>Rate</th>
-                        <th>Current Revenue</th>
                         <th>Revenue Goal</th>
+                        <th>Current Revenue</th>
                         <th>Operations</th>
                     </tr>
                 </thead>
@@ -317,10 +363,10 @@
                             {{  campaign.impressions.rate }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
-                            {{ (campaign.impressions.goal * campaign.impressions.rate - (campaign.impressions.goal * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
+                            {{ (campaign.impressions.count * campaign.impressions.rate - (campaign.impressions.count * campaign.impressions.rate * config['COMMISSION']|float))|to_currency }}
                         </td>
                         <td>
                             <form class="form-draft" action="" method="">
@@ -347,7 +393,31 @@
     </div>
 
 
-    <!-- Small modal -->
+    <!-- Change default rate Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Impression Rate</h4>
+          </div>
+            <form action="{{ url_for('publisher.update_impression_rate', pid=publisher._id) }}" method="POST">
+              <div class="modal-body">
+                  <div class="form-group">
+                      {{ rateform.rate.label }}
+                      {{ rateform.rate(class="form-control") }}
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Campaign Modal -->
     <div class="modal fade campaign-share-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
