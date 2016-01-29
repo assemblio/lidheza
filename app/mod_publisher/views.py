@@ -72,6 +72,7 @@ def campaign_create(pid):
             campaign = {
                 'publisher':{
                     'id': pid,
+                    'name': publisher['name'],
                     'host': publisher['host']
                 },
                 'status': 'draft',
