@@ -24,13 +24,12 @@
 
             });
 
-            $( ".btn-delete-draft" ).click(function() {
-                var campaign_id = $(this).parent().find('input[id=draft-campaign-id]').val();
-                var action = '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+            $( ".btn-delete-stopped" ).click(function() {
+                deleteCampaign(this, 'stopped-campaign-id');
+            });
 
-                $('.form-published').attr('method', 'POST');
-                $('.form-published').attr('action', action);
-                $('.form-published').submit();
+            $( ".btn-delete-draft" ).click(function() {
+                deleteCampaign(this, 'draft-campaign-id')
             });
 
             $( ".btn-stop-published" ).click(function() {
@@ -41,6 +40,16 @@
                 $('.form-published').attr('action', action);
                 $('.form-published').submit();
             });
+
+            function deleteCampaign(source, campaignIDFormElementInputId){
+                var form = $(source).parent();
+                var campaign_id = form.find('input[id=' + campaignIDFormElementInputId + ']').val();
+                var action = '{{ url_for('publisher.campaign_delete', pid=publisher._id, campaign_id='XXX')}}'.replace('XXX', campaign_id);
+
+                form.attr('method', 'POST');
+                form.attr('action', action);
+                form.submit();
+            }
 
             function publishCampaign(source, campaignIDFormElementInputId){
                 var form = $(source).parent();
@@ -172,7 +181,7 @@
                         <td>
                             <form class="form-published" action="" method="">
                                 <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-completed" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-completed" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-success btn-sm btn-archive" aria-label="Archive">
@@ -237,7 +246,7 @@
                         <td>
                             <form class="form-published" action="" method="">
                                 <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-published" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-published" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-published" aria-label="Edit">
@@ -305,11 +314,14 @@
                         <td>
                             <form class="form-stopped" action="" method="">
                                 <input type="hidden" id="stopped-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-primary btn-sm btn-share-stopped" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-stopped" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-stopped" aria-label="Edit">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-danger btn-sm btn-delete-stopped" aria-label="Delete">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-success btn-sm btn-play-stopped" aria-label="Play">
                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
@@ -376,14 +388,14 @@
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-draft" aria-label="Edit">
                                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                 </button>
+                                <button type="button" class="btn btn-danger btn-primary btn-sm btn-delete-draft" aria-label="Delete">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
                                 {% if campaign.assets and campaign.assets|length > 0 %}
                                 <button type="button" class="btn btn-default btn-success btn-sm btn-play-draft" aria-label="Play">
                                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                 </button>
                                 {% endif %}
-                                <button type="button" class="btn btn-danger btn-primary btn-sm btn-delete-draft" aria-label="Delete">
-                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                </button>
                             </form>
                         </td>
                     </tr>
