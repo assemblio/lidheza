@@ -69,6 +69,10 @@ def load_config(app):
     # Commission
     app.config['COMMISSION'] = config.get('Application', 'COMMISSION')
 
+    # MAILGUN
+    app.config['MAIL_GUN_API_KEY'] = config.get('MailGun', 'API_KEY')
+    app.config['MAIL_GUN_API_BASE_URL'] = config.get('MailGun', 'API_BASE_URL')
+
     # Logging path might be relative or starts from the root.
     # If it's relative then be sure to prepend the path with the application's root directory path.
     log_path = config.get('Logging', 'PATH')
@@ -109,10 +113,11 @@ def init_modules(app):
     from app.mod_entry_point.views import mod_entry_point
     from app.mod_publisher.views import mod_publisher
     from app.mod_advertiser.views import mod_advertiser
+    from app.mod_mail.views import mod_mail
     from app.mod_serve.views import mod_serve
-
 
     app.register_blueprint(mod_entry_point)
     app.register_blueprint(mod_publisher)
     app.register_blueprint(mod_advertiser)
+    app.register_blueprint(mod_mail)
     app.register_blueprint(mod_serve)

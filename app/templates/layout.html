@@ -96,6 +96,12 @@
             {% endif %}
         {% endwith %}
 
+        <div id="global-alert-error" class="alert alert-danger fade in" style="display:none;">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Error!</strong> <span id="global-alert-error-msg"></span>
+        </div>
+
+
         {% block container %}
         {% endblock %}
 

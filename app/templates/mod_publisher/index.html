@@ -83,28 +83,31 @@
             });
 
             $( ".btn-share-campaign" ).click(function() {
-                var campaign_id = $('#share-campaign-id').val();
 
-                // Construct the message.
-                var message = "Hello!" +
-                    "\n\nCheck out how your ad campaign in '{{ publisher.name }}' is doing:" +
-                    "\n{{ config['SERVER_HOST'] }}/admin/advertiser/campaign/" + campaign_id +
-                    "\n\nCheers," +
-                    "\n\nThe Lidheza Team";
+                $( "#share-email" ).val('');
 
                 // Send the share e-mail.
                 $.ajax({
-                    url: "//formspree.io/" + $('#share-email').val(),
+                    url: "{{  url_for('mail.campaign_stats') }}",
                     method: "POST",
-                    data: {
-                        "message": message,
-                        "subject": "Your Advertisement Stats with {{ publisher.name }}",
-                        "replyto": "lidheza@assemblio.com"
-                    },
-                    dataType: "json"
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "to": $('#share-email').val(),
+                        "publisherId": "{{ publisher._id }}",
+                        "publisherName": "{{ publisher.name }}",
+                        "campaignId": $('#share-campaign-id'),
+                    })
                 }).done(function() {
                     // Close the modal.
-                    $('.campaign-share-modal').modal('hide')
+                    $('.campaign-share-modal').modal('hide');
+
+                }).fail(function() {
+                    $('.campaign-share-modal').modal('hide');
+                    $('#global-alert-error-msg').html('Campaign stats not shared, please contact help@lidheza.com.');
+
+                    $("#global-alert-error").fadeTo(5000, 500).fadeOut(2000, function(){
+                        $("#global-alert-error").hide();
+                    });
                 });
             });
         });

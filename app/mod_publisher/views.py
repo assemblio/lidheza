@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, flash, request, Response, redirect, url_for, current_app
 from app import utils, mongo_utils
 from forms import ImpressionRateForm, CampaignForm, AssetForm, SettingsForm
 import datetime
 import os
+import requests
 
 mod_publisher = Blueprint('publisher', __name__, url_prefix='/admin/publisher')
 
@@ -251,7 +252,43 @@ def ad_tags(pid):
     return render_template('mod_publisher/adtags.html', publisher=publisher, available_ad_spaces=available_ad_spaces)
 
 
+@mod_publisher.route('/<pid>/campaign/<campaign_id>/share', methods=['POST'])
+def share_campaign_stats(pid, campaign_id):
 
+    app_host = current_app.config['SERVER_HOST']
+
+    # Get MailGun API key and Base URL.
+    mg_api_key = current_app.config['MAIL_GUN_API_KEY']
+    mg_base_url = current_app.config['MAIL_GUN_API_BASE_URL']
+
+    # From request json body, get the to e-mail address and publisher name
+    to = request.json['to']
+    publisher = request.json['publisher']
+
+    # Build text
+    message = """
+        Hello,
+
+        Click on the following link to see out how your ads are doing at %s:
+        %s/admin/advertiser/campaign/%s
+
+        Cheers,
+
+        The Lidheza Team
+    """ % (publisher, app_host, campaign_id)
+
+    req = requests.post(mg_base_url, auth=('api', mg_api_key), data={
+        'from': 'donotreply@lidheza.com',
+        'to': to,
+        'subject': "Here's how your ads are doing at %s." % publisher,
+        'text': message
+    })
+
+    if req.status_code != 200:
+        # log error req.text
+        pass
+
+    return Response(status=req.status_code)
 
 
 
