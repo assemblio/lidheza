@@ -9,6 +9,7 @@ class ImpressionRateForm(Form):
 
 class CampaignForm(Form):
     id = HiddenField('ID')
+    advertiser_email = StringField('Advertiser E-mail', [validators.Required()])
     campaign_name = StringField('Campaign Name', [validators.Required()])
     url = StringField('URL', [validators.Required()])
     start_date = DateField('Start Date', [validators.Required()], format='%d/%m/%Y')

@@ -4,6 +4,7 @@ import ConfigParser
 from logging.handlers import RotatingFileHandler
 from flask.ext.pymongo import PyMongo
 from app.utils.utils import Utils
+from app.utils.mail_utils import  MailUtils
 from app.utils.mongo_utils import MongoUtils
 from flask.ext.cors import CORS
 
@@ -12,6 +13,7 @@ mongo = PyMongo()
 
 # Initialize generic utils class
 utils = Utils()
+mail_utils = MailUtils()
 
 # Initialize mongo access point
 mongo_utils = MongoUtils(mongo)

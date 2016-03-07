@@ -72,19 +72,23 @@
             }
 
             // Listener - Triggered when the share button is clicked/shown
-            // so that we can ste the campaign id in a hidden field and it
+            // so that we can store the campaign id in a hidden field and it
             // can be accessed when submitting the modal.
             $('.campaign-share-modal').on('show.bs.modal', function (event) {
                 var triggerButton = $(event.relatedTarget);
                 var campaignId = triggerButton.data('campaign-id');
+                var advertiserEmail = triggerButton.data('advertiser-email');
 
-                var modal = $(this);
-                modal.find('.modal-body input[id=share-campaign-id]').val(campaignId);
+                //var modal = $(this);
+
+                //modal.find('.modal-body input[id=share-advertiser-email]').val(advertiserEmail);
+                //modal.find('.modal-body input[id=share-campaign-id]').val(campaignId);
+
+                $('#share-advertiser-email').val(advertiserEmail);
+                $('#share-campaign-id').val(campaignId);
             });
 
             $( ".btn-share-campaign" ).click(function() {
-
-                $( "#share-email" ).val('');
 
                 // Send the share e-mail.
                 $.ajax({
@@ -92,10 +96,10 @@
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({
-                        "to": $('#share-email').val(),
+                        "to": $('#share-advertiser-email').val(),
                         "publisherId": "{{ publisher._id }}",
                         "publisherName": "{{ publisher.name }}",
-                        "campaignId": $('#share-campaign-id'),
+                        "campaignId": $('#share-campaign-id')
                     })
                 }).done(function() {
                     // Close the modal.
@@ -184,7 +188,7 @@
                         <td>
                             <form class="form-published" action="" method="">
                                 <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-completed" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-completed" aria-label="Share" data-advertiser-email="{{ campaign.advertiserEmail }}" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-success btn-sm btn-archive" aria-label="Archive">
@@ -249,7 +253,7 @@
                         <td>
                             <form class="form-published" action="" method="">
                                 <input type="hidden" id="published-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-published" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-published" aria-label="Share" data-advertiser-email="{{ campaign.advertiserEmail }}" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-published" aria-label="Edit">
@@ -317,7 +321,7 @@
                         <td>
                             <form class="form-stopped" action="" method="">
                                 <input type="hidden" id="stopped-campaign-id" value="{{ campaign._id }}"/>
-                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-stopped" aria-label="Share" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
+                                <button type="button" class="btn btn-default btn-default btn-sm btn-share-stopped" aria-label="Share" data-advertiser-email="{{ campaign.advertiserEmail }}" data-campaign-id="{{ campaign._id }}" data-toggle="modal" data-target=".campaign-share-modal">
                                     <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
                                 </button>
                                 <button type="button" class="btn btn-default btn-primary btn-sm btn-edit-stopped" aria-label="Edit">
@@ -442,8 +446,8 @@
                     <form>
                         <div class="form-group">
                             <input type="hidden" id="share-campaign-id"/>
-                            <label for="share-email">Share statistics:</label>
-                            <input type="text" class="form-control" id="share-email" name="share-email" placeholder="E-mail"/>
+                            <label for="share-advertiser-email">Share statistics:</label>
+                            <input type="text" class="form-control" id="share-advertiser-email" name="share-advertiser-email" placeholder="E-mail"/>
                         </div>
                     </form>
                 </div>

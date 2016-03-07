@@ -66,6 +66,13 @@
     <div class="row">
         <div class="col-sm-12" style="padding-left:25%;padding-right:25%">
             <form class="form-horizontal form-campaign" action="" method="">
+                <div class="form-group {{"has-error" if form.advertiser_email.errors }}">
+                    {{ form.advertiser_email.label(class="control-label col-sm-4") }}
+                    <div class="col-sm-8">
+                        {{ form.advertiser_email(class="form-control") }}
+                    </div>
+                </div>
+
                 <div class="form-group {{"has-error" if form.campaign_name.errors }}">
                     {{ form.campaign_name.label(class="control-label col-sm-4") }}
                     <div class="col-sm-8">
