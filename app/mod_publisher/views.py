@@ -95,9 +95,6 @@ def campaign_create(pid):
 
             campaign_id = mongo_utils.insert_one_campaign(campaign)
 
-            # TODO: IF advertiser email is not associated to any of our current advertiser users:
-            #mail_utils.send_campaign_created(publisher['name'], campaign['advertiserEmail'], campaign_id)
-
             # Move on the loading assets
             return redirect(url_for('publisher.campaign_assets', pid=pid, campaign_id=campaign_id))
 
@@ -183,6 +180,10 @@ def campaign_save_as_draft(pid, campaign_id):
 @mod_publisher.route('/<pid>/campaign/<campaign_id>/publish', methods=['POST'])
 def campaign_publish(pid, campaign_id):
     mongo_utils.set_campaign_as_published(campaign_id)
+
+    # TODO: IF advertiser email is not associated to any of our current advertiser users:
+    #mail_utils.send_campaign_created(publisher['name'], campaign['advertiserEmail'], campaign_id)
+
     return redirect(url_for('publisher.index', pid=pid))
 
 
