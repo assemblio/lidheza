@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, Response, redirect, url_for, current_app
-from app import utils, mongo_utils
+from app import utils, mongo_utils, mail_utils
 from forms import ImpressionRateForm, CampaignForm, AssetForm, SettingsForm
 import datetime
 import os
@@ -94,6 +94,9 @@ def campaign_create(pid):
             }
 
             campaign_id = mongo_utils.insert_one_campaign(campaign)
+
+            # TODO: IF advertiser email is not associated to any of our current advertiser users:
+            #mail_utils.send_campaign_created(publisher['name'], campaign['advertiserEmail'], campaign_id)
 
             # Move on the loading assets
             return redirect(url_for('publisher.campaign_assets', pid=pid, campaign_id=campaign_id))

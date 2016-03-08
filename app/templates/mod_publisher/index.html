@@ -79,11 +79,6 @@
                 var campaignId = triggerButton.data('campaign-id');
                 var advertiserEmail = triggerButton.data('advertiser-email');
 
-                //var modal = $(this);
-
-                //modal.find('.modal-body input[id=share-advertiser-email]').val(advertiserEmail);
-                //modal.find('.modal-body input[id=share-campaign-id]').val(campaignId);
-
                 $('#share-advertiser-email').val(advertiserEmail);
                 $('#share-campaign-id').val(campaignId);
             });
@@ -99,7 +94,7 @@
                         "to": $('#share-advertiser-email').val(),
                         "publisherId": "{{ publisher._id }}",
                         "publisherName": "{{ publisher.name }}",
-                        "campaignId": $('#share-campaign-id')
+                        "campaignId": $('#share-campaign-id').val(),
                     })
                 }).done(function() {
                     // Close the modal.

@@ -7,7 +7,7 @@ class MailUtils(object):
     def send_campaign_created(self, publisher_name, to, campaign_id):
 
         app_host = current_app.config['SERVER_HOST']
-        frm = 'donotreply@lidheza.com'
+        frm = 'Lidheza@lidheza.com'
         subject = '%s is publishing your ads.'
 
         # Build text
@@ -30,7 +30,7 @@ class MailUtils(object):
     def send_campaign_stats_to_advertiser(self, publisher_name, to, campaign_id):
 
         app_host = current_app.config['SERVER_HOST']
-        frm = 'donotreply@lidheza.com'
+        frm = 'Lidheza@lidheza.com'
         subject = "Here's how your ads are doing at %s." % publisher_name
 
         # TODO: %s/admin/advertiser/campaign/%s should be %s/admin/advertiser/<advertiser_id>/campaign/%s
@@ -55,12 +55,14 @@ class MailUtils(object):
         mg_api_key = current_app.config['MAIL_GUN_API_KEY']
         mg_base_url = current_app.config['MAIL_GUN_API_BASE_URL']
 
-        req = requests.post(mg_base_url, auth=('api', mg_api_key), data={
-            'from': frm,
-            'to': to,
-            'subject': subject,
-            'text': message
-        })
+        req = requests.post(
+            mg_base_url + "/messages",
+            auth=('api', mg_api_key),
+            data={'from': frm,
+                  'to': to,
+                  'subject': subject,
+                  'text': message
+            })
 
         if req.status_code != 200:
             current_app.logger.error(req.text)
